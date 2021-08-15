@@ -28,7 +28,7 @@ public class OnGrounedCollider : MonoBehaviour
     private void OnTriggerStay(Collider collider)
     {
         triggerCollider = collider.name;
-        if (!movementController.onGrounded)
+        if (!movementController.onGround)
         {
             movementController.UpdateCapsuleCollider(false);
         }
@@ -45,7 +45,7 @@ public class OnGrounedCollider : MonoBehaviour
         movementController.allowJump = true;
         if (mainCharacterAnimator.animator.GetBool("isJump") && mainCharacterAnimator.animator.GetFloat("jumpValue") == 0)
         {
-            mainCharacterAnimator.SetJumpAnimationParameter(false, 1, 0);
+            //mainCharacterAnimator.SetJumpAnimationParameter(false, 1, 0);
         }
     }
 

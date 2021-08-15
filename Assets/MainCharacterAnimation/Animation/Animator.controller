@@ -46,7 +46,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2255595289320118685}
@@ -106,7 +106,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2255595289320118685}
@@ -238,7 +238,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: vertical
     m_Mirror: 0
-  m_BlendParameter: jumpValue
+  m_BlendParameter: jumpProcessValue
   m_BlendParameterY: vertical
   m_MinThreshold: -1
   m_MaxThreshold: 1
@@ -263,7 +263,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isManipulationFire
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4699264151841035288}
@@ -462,7 +462,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isFire
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4699264151841035288}
@@ -487,7 +487,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: isWalk
@@ -674,7 +674,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: isJump
+  - m_Name: isJumporFloat
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -746,7 +746,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: jumpValue
+  - m_Name: jumpProcessValue
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -797,7 +797,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isWalk
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: isManipulationFire
@@ -840,7 +840,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: isManipulationFire
@@ -1222,7 +1222,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: isIdle
@@ -1306,7 +1306,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: isManipulationFire
@@ -1858,7 +1858,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isJump
+    m_ConditionEvent: isJumporFloat
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: isIdle

@@ -2031,7 +2031,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434017009}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.75, y: 3.325, z: 21.9}
+  m_LocalPosition: {x: -3.75, y: 2.5, z: 18.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 139194181}
@@ -3860,7 +3860,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1198213600
 Transform:
   m_ObjectHideFlags: 0
@@ -3884,7 +3884,7 @@ BoxCollider:
   m_GameObject: {fileID: 1198213599}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 0.10555625, z: 0.30483627}
   m_Center: {x: 0, y: 0.04286462, z: 0.069898605}
@@ -3895,7 +3895,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1198213599}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d116db90e13f901458a73774e5cc86f9, type: 3}
   m_Name: 
@@ -5156,7 +5156,7 @@ Transform:
   m_GameObject: {fileID: 1921436054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.9546723, y: 0.72192633, z: 19.502842}
-  m_LocalScale: {x: 10, y: 0.5, z: 10}
+  m_LocalScale: {x: 100, y: 0.5, z: 50}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 11
@@ -5546,6 +5546,7 @@ GameObject:
   - component: {fileID: 2140555908}
   - component: {fileID: 2140555907}
   - component: {fileID: 2140555906}
+  - component: {fileID: 2140555910}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -5624,11 +5625,27 @@ Transform:
   m_GameObject: {fileID: 2140555905}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.75, y: 2.9, z: 21.89}
-  m_LocalScale: {x: 3, y: 0.1, z: 3}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &2140555910
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140555905}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &431230197419583753
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6431,18 +6448,23 @@ MonoBehaviour:
   walkSpeed: 7
   onAimOrFireSpeed: 5
   jumpForce: 250
-  pauseJumpTime: 0
+  jumpGroundingPreventionTime: 0.1
   groundCheckDistance: 0.05
-  onGrounded: 0
+  skinWidth: 0.001
+  slopeLimit: 45
+  currentSlope: 0
+  onGround: 0
   onAir: 1
-  isReadyToJump: 1
+  readyToJump: 1
   allowJump: 1
+  isGrounded: 0
   followTargetTransform: {fileID: 408196812}
   rigidbody: {fileID: 0}
   movementVector: {x: 0, y: 0, z: 0}
   turnSpeed: {x: -3, y: 3, z: 0}
   limitAngleY: {x: 50, y: 300}
   rotationLerp: 0.5
+  m_LastTimeJumped: 0
   collisonCollider: 
   cubeRigidbody: {fileID: 0}
   forceTest: 1
@@ -6596,9 +6618,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.24
-  m_Height: 1.8
+  m_Height: 1.86
   m_Direction: 1
-  m_Center: {x: 0, y: 0.92, z: -0.01}
+  m_Center: {x: 0, y: 0.925, z: 0}
 --- !u!1 &8916927845207098036
 GameObject:
   m_ObjectHideFlags: 0
@@ -7500,7 +7522,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8916927845207098024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.75, y: 1.825, z: 21.9}
+  m_LocalPosition: {x: -3.75, y: 1, z: 18.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1224282448}

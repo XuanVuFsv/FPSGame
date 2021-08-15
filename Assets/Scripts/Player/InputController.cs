@@ -59,22 +59,21 @@ public class InputController : MonoBehaviour
         look.x = mouseX = Input.GetAxis("Mouse X");
         look.y = mouseY = Input.GetAxis("Mouse Y");
 
-        isJump = isBrake = Input.GetButton("Jump");
+        isJump = isBrake = Input.GetButtonDown("Jump");
         isSingleFire = Input.GetMouseButtonDown(0);
         isAutoFire = (!isSingleFire && Input.GetMouseButton(0));
         isAim = Input.GetMouseButton(1);
 
         if (Input.GetMouseButton(0))
         {
-            fireValue += 0.3f;
+            fireValue += 0.25f;
             isFire = true;
         }
-        else if (Input.GetMouseButtonDown(0))
-        {
-            fireValue = 2;
-            isFire = true;
-        }
-
+        //else if (Input.GetMouseButtonDown(0))
+        //{
+        //    fireValue = 2;
+        //    isFire = true;
+        //}
         else if (Input.GetMouseButtonUp(0) || !(Input.GetMouseButton(0)))
         {
             fireValue -= 0.1f;

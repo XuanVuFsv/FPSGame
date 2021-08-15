@@ -32,9 +32,9 @@ public class JumpChecker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!movementController.onGrounded && !(other.name == footColliderName))
+        if (!movementController.onGround && !(other.name == footColliderName))
         {
-            movementController.onGrounded = true;
+            movementController.onGround = true;
             movementController.onAir = false;
         }
     }
@@ -42,7 +42,7 @@ public class JumpChecker : MonoBehaviour
     {
         if (!(other.name == footColliderName))
         {
-            movementController.onGrounded = false;
+            movementController.onGround = false;
             movementController.onAir = true;    
         }
     }
@@ -61,7 +61,7 @@ public class JumpChecker : MonoBehaviour
         yield return new WaitForSeconds(timeOfPreLanding);
         if (Physics.Raycast(transform.position, -Vector3.up * distanceOfJumChecker, out hit, distanceOfJumChecker))
         {
-            movementController.onGrounded = true;
+            movementController.onGround = true;
             Debug.Log(hit.collider.name);
             movementController.onAir = false;
         }

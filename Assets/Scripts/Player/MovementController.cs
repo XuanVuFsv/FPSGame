@@ -9,11 +9,14 @@ public class MovementController : MonoBehaviour
     public Quaternion nextRotation;
     public LayerMask groundCheckLayers = -1;
     public float moveSpeed, walkSpeed, onAimOrFireSpeed, jumpForce;
-    public float pauseJumpTime;
+    public float jumpGroundingPreventionTime;
     public float groundCheckDistance = 0.05f;
-    public bool onGrounded, onAir;
-    public bool isReadyToJump = true, allowJump = true;
-    public bool IsGrounded { get; private set; }
+    public float skinWidth = 0.02f;
+    public float slopeLimit;
+    public float currentSlope;
+    public bool onGround, onAir;
+    public bool readyToJump = true, allowJump = true;
+    public bool isGrounded;
     public bool HasJumpedThisFrame { get; private set; }
 
     [SerializeField]
@@ -25,9 +28,11 @@ public class MovementController : MonoBehaviour
     [SerializeField]
     Vector3 turnSpeed;
     [SerializeField]
-    Vector2 limitAngleY; // properties: x-min y-max
+    Vector2 limitAngleY; // properties: x is min value y is max value
     [SerializeField]
     float rotationLerp = 0.5f;
+    [SerializeField]
+    float m_LastTimeJumped = 0;
     [SerializeField]
     string collisonCollider;
 
@@ -37,7 +42,6 @@ public class MovementController : MonoBehaviour
     CameraController cameraController;
     Vector3 m_GroundNormal;
 
-    const float k_JumpGroundingPreventionTime = 0.2f;
     const float k_GroundCheckDistanceInAir = 0.07f;
 
     #region Test
@@ -56,59 +60,46 @@ public class MovementController : MonoBehaviour
         capsuleCollider.material = physicMaterials[0];
     }
 
+    private void Update()
+    {
+        GroundCheck();
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
         Move();
-        //GroundCheck();
-        //UpdateFollowTarget();
-        //AdjustAnimationByVelocity();
-        //ControlCamera();
-        //ModifyOnFire();
-        if (inputController.isJump && isReadyToJump && allowJump)
         {
-            if (onGrounded)
-            {
-                StartCoroutine(Jump(1));
-            }
-            else if (!onGrounded && rigidbody.velocity.y <= -5)
-            {
-                StartCoroutine(Jump(0));
-            }
-        }
-
-        // jumping
-        if (IsGrounded && inputController.isJump)
-        {
-            // force the crouch state to false
-            //if (SetCrouchingState(false, false))
+            //if (inputController.isJump && readyToJump && allowJump)
             //{
-            // start by canceling out the vertical component of our velocity
-            CharacterVelocity = new Vector3(CharacterVelocity.x, 0f, CharacterVelocity.z);
-
-            // then, add the jumpSpeed value upwards
-            CharacterVelocity += Vector3.up * JumpForce;
-
-            // play sound
-            AudioSource.PlayOneShot(JumpSfx);
-
-            // remember last time we jumped because we need to prevent snapping to ground for a short time
-            m_LastTimeJumped = Time.time;
-            HasJumpedThisFrame = true;
-
-            // Force grounding to false
-            IsGrounded = false;
-            m_GroundNormal = Vector3.up;
+            //    if (onGround)
+            //    {
+            //        StartCoroutine(Jump(1));
+            //    }
+            //    else if (!onGround && rigidbody.velocity.y <= -5)
+            //    {
+            //        StartCoroutine(Jump(0));
+            //    }
             //}
         }
 
-        if (!inputController.isWalk)
+        // jumping
+        if (isGrounded && inputController.isJump)
         {
-            capsuleCollider.material = physicMaterials[0];
+            isGrounded = false;
+            m_GroundNormal = Vector3.up;
+            StartCoroutine(Jump(1));
         }
-        else
+
         {
-            capsuleCollider.material = physicMaterials[1];
+            //if (!inputController.isWalk)
+            //{
+            //    capsuleCollider.material = physicMaterials[0];
+            //}
+            //else
+            //{
+            //    capsuleCollider.material = physicMaterials[1];
+            //}
         }
 
         #region ExecuteTest
@@ -226,93 +217,123 @@ public class MovementController : MonoBehaviour
         rigidbody.MovePosition(rigidbody.position + movementVector * moveSpeed * Time.deltaTime);
     }
 
-    //void GroundCheck()
-    //{
-    //    // Make sure that the ground check distance while already in air is very small, to prevent suddenly snapping to ground
-    //    float chosenGroundCheckDistance =
-    //        IsGrounded ? (m_Controller.skinWidth + GroundCheckDistance) : k_GroundCheckDistanceInAir;
-
-    //    // reset values before the ground check
-    //    IsGrounded = false;
-    //    m_GroundNormal = Vector3.up;
-
-    //    // only try to detect ground if it's been a short amount of time since last jump; otherwise we may snap to the ground instantly after we try jumping
-    //    if (Time.time >= m_LastTimeJumped + k_JumpGroundingPreventionTime)
-    //    {
-    //        // if we're grounded, collect info about the ground normal with a downward capsule cast representing our character capsule
-    //        if (Physics.CapsuleCast(GetCapsuleBottomHemisphere(), GetCapsuleTopHemisphere(m_Controller.height),
-    //            m_Controller.radius, Vector3.down, out RaycastHit hit, chosenGroundCheckDistance, GroundCheckLayers,
-    //            QueryTriggerInteraction.Ignore))
-    //        {
-    //            // storing the upward direction for the surface found
-    //            m_GroundNormal = hit.normal;
-    //            Debug.LogFormat("m_GroundNormal: {0} up: {1} Dot: {2} Angle: {3}", hit.point, transform.up, Vector3.Dot(hit.normal, transform.up), Vector3.Angle(hit.normal, transform.up));
-
-    //            // Only consider this a valid ground hit if the ground normal goes in the same direction as the character up
-    //            // and if the slope angle is lower than the character controller's limit
-
-    //            if (Vector3.Dot(hit.normal, transform.up) > 0f &&
-    //                IsNormalUnderSlopeLimit(m_GroundNormal))
-    //            {
-    //                IsGrounded = true;
-
-    //                // handle snapping to the ground
-    //                if (hit.distance > m_Controller.skinWidth)
-    //                {
-    //                    m_Controller.Move(Vector3.down * hit.distance);
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
-
-    //// Returns true if the slope angle represented by the given normal is under the slope angle limit of the character controller
-    //bool IsNormalUnderSlopeLimit(Vector3 normal)
-    //{
-    //    return Vector3.Angle(transform.up, normal) <= m_Controller.slopeLimit;
-    //}
-
-    //// Gets the center point of the bottom hemisphere of the character controller capsule    
-    //Vector3 GetCapsuleBottomHemisphere()
-    //{
-    //    bot = transform.position + (transform.up * m_Controller.radius);
-    //    return transform.position + (transform.up * m_Controller.radius);
-    //}
-
-    //// Gets the center point of the top hemisphere of the character controller capsule    
-    //Vector3 GetCapsuleTopHemisphere(float atHeight)
-    //{
-    //    top = transform.position + (transform.up * (atHeight - m_Controller.radius));
-    //    return transform.position + (transform.up * (atHeight - m_Controller.radius));
-    //}
-
-    IEnumerator Jump(float jumpValue)
+    void GroundCheck()
     {
-        isReadyToJump = false;
-        allowJump = false;
-        onGrounded = false;
-        onAir = true;
-        mainCharacterAnimator.SetJumpAnimationParameter(true, jumpValue, 0.533f);
-        StartCoroutine(PauseJump());
-        yield return new WaitForSeconds(0.533f * 0.57f); //play a part of animation before jump 1.2f / 36 * 8
+        // Make sure that the ground check distance while already in air is very small, to prevent suddenly snapping to ground
+        float chosenGroundCheckDistance =
+            isGrounded ? (skinWidth + groundCheckDistance) : k_GroundCheckDistanceInAir;
+
+        m_GroundNormal = Vector3.up;
+
+        // only try to detect ground if it's been a short amount of time since last jump; otherwise we may snap to the ground instantly after we try jumping
+        if (readyToJump)
+        {
+            {
+                //Debug.LogFormat("GetCapsuleBottomHemisphere: {0} GetCapsuleTopHemisphere: {1} height: {2}", GetCapsuleBottomHemisphere(), GetCapsuleTopHemisphere(capsuleCollider.height), capsuleCollider.height);
+                //Debug.LogFormat("down: {0} chosenGroundCheckDistance: {1}", Vector3.down, chosenGroundCheckDistance);
+            }
+
+            // if we're grounded, collect info about the ground normal with a downward capsule cast representing our character capsule
+            if (Physics.CapsuleCast(GetCapsuleBottomHemisphere(), GetCapsuleTopHemisphere(capsuleCollider.height),
+                capsuleCollider.radius, Vector3.down, out RaycastHit hit, chosenGroundCheckDistance, groundCheckLayers,
+                QueryTriggerInteraction.Ignore) || (currentSlope <= slopeLimit && Physics.Raycast(transform.position, Vector3.down, out hit, 100, groundCheckLayers)))
+            {
+                // storing the upward direction for the surface found
+                m_GroundNormal = hit.normal;
+
+                {
+                    //Debug.Log(hit.collider.name);
+                    //Debug.LogFormat("m_GroundNormal: {0} up: {1} Dot: {2} Angle: {3}", hit.point, transform.up, Vector3.Dot(hit.normal, transform.up), Vector3.Angle(transform.up, hit.normal));
+                }
+
+                // Only consider this a valid ground hit if the ground normal goes in the same direction as the character up
+                // and if the slope angle is lower than the character controller's limit
+                if (Vector3.Dot(hit.normal, transform.up) > 0f &&
+                    IsNormalUnderSlopeLimit(m_GroundNormal))
+                {
+                    isGrounded = true;
+                    //rigidbody.MovePosition(Vector3.down * hit.distance);
+                    //UpdateCapsuleCollider(false);
+                    //allowJump = true;
+                    if (mainCharacterAnimator.animator.GetBool("isJumporFloat"))
+                    {
+                        mainCharacterAnimator.SetJumpAnimationParameter(isGrounded, false, 0, 0);
+                    }
+                }
+                else if(!IsNormalUnderSlopeLimit(m_GroundNormal))
+                {
+                    isGrounded = true;
+                    //UpdateCapsuleCollider(true);
+                    Debug.Log("Not same direction or slope");
+                }
+            }
+            else
+            {
+                isGrounded = false;
+                if (!mainCharacterAnimator.animator.GetBool("isJumporFloat"))
+                {
+                    //Debug.Log("Falling");
+                    mainCharacterAnimator.SetJumpAnimationParameter(isGrounded, true, 0, 0);
+                }
+                //UpdateCapsuleCollider(true);
+                //Debug.Log("Not collide ground");
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(GetCapsuleBottomHemisphere(), capsuleCollider.radius);
+        Gizmos.DrawWireSphere(GetCapsuleTopHemisphere(capsuleCollider.height), capsuleCollider.radius);
+    }
+
+    // Returns true if the slope angle represented by the given normal is under the slope angle limit of the character controller
+    bool IsNormalUnderSlopeLimit(Vector3 normal)
+    {
+        currentSlope = Vector3.Angle(transform.up, normal);
+        return Vector3.Angle(transform.up, normal) <= slopeLimit;
+    }
+
+    // Gets the center point of the bottom hemisphere of the character controller capsule    
+    Vector3 GetCapsuleBottomHemisphere()
+    {
+        return transform.position + (transform.up * capsuleCollider.radius);
+    }
+
+    // Gets the center point of the top hemisphere of the character controller capsule    
+    Vector3 GetCapsuleTopHemisphere(float atHeight)
+    {
+        return transform.position + (transform.up * (atHeight - capsuleCollider.radius));
+    }
+
+    IEnumerator Jump(float jumpProcessValue)
+    {
+        readyToJump = false;
+        //allowJump = false;
+        //onGround = false;
+        //onAir = true;
+        mainCharacterAnimator.SetJumpAnimationParameter(isGrounded, true, jumpProcessValue, 0.5f);
+        StartCoroutine(PreventJump());
+        yield return new WaitForSeconds((18 / 31) * (16 / 3)); //play a part of animation before jump t = 8/15 * 0.533 8/15 frame length = 0.533s
         rigidbody.AddForce(transform.up * jumpForce);
     }
 
-    IEnumerator PauseJump()
+    IEnumerator PreventJump()
     {
-        yield return new WaitForSeconds(pauseJumpTime);
-        isReadyToJump = true;
+        yield return new WaitForSeconds(jumpGroundingPreventionTime);
+        readyToJump = true;
     }
 
     public void UpdateCapsuleCollider(bool isJump)
     {
         if (isJump)
         {
-            onGrounded = false;
+            onGround = false;
             onAir = true;
             return;
         }
-        onGrounded = true;
+        onGround = true;
         onAir = false;
     }
 

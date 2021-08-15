@@ -94,7 +94,7 @@ public class MainCharacterAnimator : MonoBehaviour
         #endregion
 
         #region Idle and Walk
-        if (movementController.onGrounded)
+        if (movementController.isGrounded)
         {
             animator.SetBool("isIdle", inputController.isIdle);
             animator.SetBool("isWalk", inputController.isWalk);
@@ -221,31 +221,28 @@ public class MainCharacterAnimator : MonoBehaviour
         //}
     }
 
-    public void SetJumpAnimationParameter(bool isJump, float jumpValue, float timeHoldAnimation)
+    public void SetJumpAnimationParameter(bool isGrounded, bool isJumporFloat, float jumpProcessValue, float timeHoldAnimation)
     {
-        animator.SetBool("isJump", isJump);
-        animator.SetFloat("jumpValue", jumpValue);
-        StartCoroutine(HoldFloatJumpAnimation(timeHoldAnimation));
-        //if (isJump && movementController.allowJump)
-        //{
-        //    animator.Play("Jump");
-        //}
+        animator.SetBool("isJumporFloat", isJumporFloat);
+        animator.SetFloat("jumpProcessValue", jumpProcessValue);
+        if (!isGrounded && isJumporFloat && timeHoldAnimation != 0) StartCoroutine(HoldFloatJumpAnimation(timeHoldAnimation));
     }
 
-    IEnumerator HoldFloatJumpAnimation(float timeHoldAnimation)
+    public IEnumerator HoldFloatJumpAnimation(float timeHoldAnimation)
     {
         yield return new WaitForSeconds(timeHoldAnimation);
-        if (!movementController.onGrounded)
+        //Debug.Log("New jump state");
+        if (!movementController.isGrounded)
         {
-            if (animator.GetFloat("jumpValue") == 1)
+            if (animator.GetFloat("jumpProcessValue") == 1)
             {
-                animator.SetFloat("jumpValue", 0);
+                animator.SetFloat("jumpProcessValue", 0);
             }
         }
         else
         {
-            animator.SetBool("isJump", false);
-            animator.SetFloat("jumpValue", 1);
+            animator.SetBool("isJumporFloat", false);
+            //animator.SetFloat("jumpProcessValue", 1);
         }
     }
 
