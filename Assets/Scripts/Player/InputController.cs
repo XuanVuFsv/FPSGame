@@ -76,7 +76,7 @@ public class InputController : MonoBehaviour
         //}
         else if (Input.GetMouseButtonUp(0) || !(Input.GetMouseButton(0)))
         {
-            fireValue -= 0.1f;
+            fireValue -= 0.25f;
         }
 
         fireValue = Mathf.Clamp(fireValue, 0, 2);

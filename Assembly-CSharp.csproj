@@ -98,10 +98,11 @@
     <Compile Include="Assets\Low Poly FPS Pack - Free (Sample)\Components\Scripts\Weapon_Scripts\HandgunScriptLPFP.cs" />
     <Compile Include="Assets\Effect\Misc Effects\Scripts\SpawnEffect.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\TextToggleIsOnTransition.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerCharacterController.cs" />
     <Compile Include="Assets\Test.cs" />
     <Compile Include="Assets\Scripts\TransformFunctionality.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerCharacterController.cs" />
+    <Compile Include="Assets\Scripts\Weapon\GunAnimatorController.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Samples\Terrain Tools\0.1.0-preview\Terrain Assets\ThirdPartyNotices.txt" />

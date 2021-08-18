@@ -236,7 +236,7 @@ public class MovementController : MonoBehaviour
             // if we're grounded, collect info about the ground normal with a downward capsule cast representing our character capsule
             if (Physics.CapsuleCast(GetCapsuleBottomHemisphere(), GetCapsuleTopHemisphere(capsuleCollider.height),
                 capsuleCollider.radius, Vector3.down, out RaycastHit hit, chosenGroundCheckDistance, groundCheckLayers,
-                QueryTriggerInteraction.Ignore) || (currentSlope <= slopeLimit && Physics.Raycast(transform.position, Vector3.down, out hit, 100, groundCheckLayers)))
+                QueryTriggerInteraction.Ignore) || (currentSlope <= slopeLimit && Physics.Raycast(transform.position, Vector3.down, out hit, 0.05f, groundCheckLayers)))
             {
                 // storing the upward direction for the surface found
                 m_GroundNormal = hit.normal;

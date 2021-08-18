@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class MainCharacterAnimator : MonoBehaviour
 {
     public Animator animator;
+    public List<Animator> weaponAnimators;
 
     [SerializeField]
     private MovementController movementController;
@@ -114,6 +115,7 @@ public class MainCharacterAnimator : MonoBehaviour
             {
                 currentFireAnimation = "single";
                 animator.SetBool("isFire", true);
+                weaponAnimators[0].SetBool("isFire", true);
                 animator.SetFloat("fireValue", 0);
                 animator.SetFloat("fireRate", 1);
                 endFireSession = false;
@@ -125,6 +127,7 @@ public class MainCharacterAnimator : MonoBehaviour
             {
                 currentFireAnimation = "auto";
                 animator.SetBool("isFire", true);
+                weaponAnimators[0].SetBool("isFire", true);
                 animator.SetFloat("fireValue", 1);
                 animator.SetFloat("fireRate", fireController.fireRate / 50);
             }
@@ -134,6 +137,7 @@ public class MainCharacterAnimator : MonoBehaviour
         {
             currentFireAnimation = "none";
             animator.SetBool("isFire", false);
+            weaponAnimators[0].SetBool("isFire", false);
             endFireAnimation = true;
         }
 
@@ -208,11 +212,13 @@ public class MainCharacterAnimator : MonoBehaviour
         {
             endFireAnimation = false;
             animator.SetBool("isFire", true);
+            weaponAnimators[0].SetBool("isFire", true);
         }
         else
         {
             endFireAnimation = true;
             animator.SetBool("isFire", false);
+            weaponAnimators[0].SetBool("isFire", false);
             //Debug.Log("end is" + endFireAnimation + " " + inputController.fireValue);
         }
         //if (!Input.GetMouseButton(0))
