@@ -6,25 +6,30 @@ public class RaycastWeapon : MonoBehaviour
 {
     public GameObject muzzleFlash;
     public Transform raycastOrigin;
+    public Transform fpsCameraTransform;
+    public float range = 100f;
 
-    private Ray ray;
-    private RaycastHit hitInfo;
+    RaycastHit hit;
 
     public void StartFiring()
     {
         muzzleFlash.SetActive(true);
 
-        ray.origin = raycastOrigin.position;
-        ray.direction = raycastOrigin.forward;
-
-        if (Physics.Raycast(ray, out hitInfo))
+        if (Physics.Raycast(raycastOrigin.position, fpsCameraTransform.forward, out hit, range, -1))
         {
-            Debug.DrawLine(ray.origin, hitInfo.point, Color.green, 20);
+            Debug.Log(hit.point + " " + hit.transform.name);
+            //Instantiate()
         }
     }
 
     public void StopFiring()
     {
         muzzleFlash.SetActive(false);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(raycastOrigin.position, fpsCameraTransform.forward);
     }
 }

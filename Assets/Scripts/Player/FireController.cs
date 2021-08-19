@@ -27,18 +27,16 @@ public class FireController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isFire = inputController.isFire;
-
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
         {
+            isFire = true;
             raycastWeapon.StartFiring();
         }
         
         if (Input.GetMouseButtonUp(0))
         {
+            isFire = false;
             raycastWeapon.StopFiring();
         }
     }
-
-
 }

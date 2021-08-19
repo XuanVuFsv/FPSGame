@@ -114,20 +114,24 @@ public class MainCharacterAnimator : MonoBehaviour
             if (Input.GetMouseButtonDown(0) && endFireAnimation)
             {
                 currentFireAnimation = "single";
-                animator.SetBool("isFire", true);
+
                 weaponAnimators[0].SetBool("isFire", true);
+                animator.SetBool("isFire", true);
                 animator.SetFloat("fireValue", 0);
                 animator.SetFloat("fireRate", 1);
+
                 endFireSession = false;
                 endFireAnimation = false;
+
                 StartCoroutine(ApllyFireRateAnimation());
                 StartCoroutine(EndSingleFireAnimation());
             }
             else if (Input.GetMouseButton(0) && inputController.fireValue == 2)
             {
                 currentFireAnimation = "auto";
-                animator.SetBool("isFire", true);
+
                 weaponAnimators[0].SetBool("isFire", true);
+                animator.SetBool("isFire", true);
                 animator.SetFloat("fireValue", 1);
                 animator.SetFloat("fireRate", fireController.fireRate / 50);
             }

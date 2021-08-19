@@ -6,10 +6,10 @@ public class CameraController : MonoBehaviour
 {
     //public Transform followTarget;
     public Camera mainCamera;
-    public Cinemachine.AxisState xAxis;
-    public Cinemachine.AxisState yAxis;
-    public Vector3 turnSpeed;
-    public float cameraSpeed = 1;
+    //public Cinemachine.AxisState xAxis;
+    //public Cinemachine.AxisState yAxis;
+    //public Vector3 turnSpeed;
+    //public float cameraSpeed = 1;
     public int fps;
 
     // Start is called before the first frame update
@@ -24,8 +24,8 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        xAxis.Update(Time.fixedDeltaTime);
-        yAxis.Update(Time.fixedDeltaTime);
+        //xAxis.Update(Time.fixedDeltaTime);
+        //yAxis.Update(Time.fixedDeltaTime);
 
         //followTarget.eulerAngles = new Vector3(yAxis.Value, xAxis.Value, 0) * cameraSpeed;
         //UpdateDirection();
@@ -34,10 +34,17 @@ public class CameraController : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, yAngle, 0), 1);
 
         if (Input.GetKeyDown(KeyCode.F)) Application.targetFrameRate = fps;
-    }
 
-    public void UpdateDirection()
-    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 }

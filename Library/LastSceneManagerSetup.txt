@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/AAPolytope Studio/Lowpoly Medieval Demos/Peasants_Free_Asset/Free_Character_Demo.unity
+- path: Assets/Low Poly FPS Pack - Free (Sample)/Demo_Scenes/Weapon_Demo_Scenes/Assault_Rifle_01_Demo/Assault_Rifle_01_Demo.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

@@ -12,8 +12,7 @@ public class InputController : MonoBehaviour
     public bool isIdle;
     public bool isWalk, isWalkRight, isWalkLeft, isWalkBackward, isWalkForward;
     public bool isAim;
-    public bool isFire = false;
-    public bool isAutoFire, isSingleFire;
+    public bool isFire;
     public bool isManipulationFire;
     public bool isJump;
     public bool isBrake;
@@ -60,31 +59,21 @@ public class InputController : MonoBehaviour
         look.y = mouseY = Input.GetAxis("Mouse Y");
 
         isJump = isBrake = Input.GetButtonDown("Jump");
-        isSingleFire = Input.GetMouseButtonDown(0);
-        isAutoFire = (!isSingleFire && Input.GetMouseButton(0));
         isAim = Input.GetMouseButton(1);
 
-        if (Input.GetMouseButton(0))
+        if (fireValue == 0) isFire = false;
+
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
         {
-            fireValue += 0.25f;
             isFire = true;
+            fireValue += 0.25f;
         }
-        //else if (Input.GetMouseButtonDown(0))
-        //{
-        //    fireValue = 2;
-        //    isFire = true;
-        //}
-        else if (Input.GetMouseButtonUp(0) || !(Input.GetMouseButton(0)))
+        else
         {
             fireValue -= 0.25f;
         }
 
         fireValue = Mathf.Clamp(fireValue, 0, 2);
-
-        if (fireValue == 0 && isFire)
-        {
-            isFire = false;
-        }
 
         UpdateStatusAnimation();
     }
@@ -102,7 +91,7 @@ public class InputController : MonoBehaviour
             isWalk = false;
         }
 
-        if (isAutoFire || isAim || isSingleFire)
+        if (isFire || isAim)
         {
             isManipulationFire = true;
         }
