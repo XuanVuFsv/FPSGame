@@ -13,6 +13,7 @@ public class InputController : MonoBehaviour
     public bool isWalk, isWalkRight, isWalkLeft, isWalkBackward, isWalkForward;
     public bool isAim;
     public bool isFire;
+    public bool isReload;
     public bool isManipulationFire;
     public bool isJump;
     public bool isBrake;
@@ -20,7 +21,6 @@ public class InputController : MonoBehaviour
     public float horizontal, vertical;
     public float mouseX, mouseY;
     public float fireValue = 0;
-    public float jumpValue;
 
     void MakeInstance()
     {
@@ -47,7 +47,7 @@ public class InputController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        jumpValue = 0;
+
     }
 
     // Update is called once per frame
@@ -59,7 +59,8 @@ public class InputController : MonoBehaviour
         look.y = mouseY = Input.GetAxis("Mouse Y");
 
         isJump = isBrake = Input.GetButtonDown("Jump");
-        isAim = Input.GetMouseButton(1);
+        isReload = Input.GetKeyDown(KeyCode.R);
+        isAim = Input.GetMouseButtonDown(1);
 
         if (fireValue == 0) isFire = false;
 

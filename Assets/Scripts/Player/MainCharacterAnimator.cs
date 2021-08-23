@@ -32,7 +32,7 @@ public class MainCharacterAnimator : MonoBehaviour
     //private  int hashName;
 
     private InputController inputController;
-    private FireController fireController;
+    private ShootController shootController;
     private AnimatorStateInfo state;
     private IEnumerator changeIdleAnimationCorroutine;
     private bool inTransition, inIdle, inWalk, inJump;
@@ -62,16 +62,18 @@ public class MainCharacterAnimator : MonoBehaviour
             QualitySettings.vSyncCount = 0;
         }
 
-        //animator = GetComponent<Animator>();
-        //countParametersAnimator = animator.parameterCount;
-        //animatorControllerParameters = new AnimatorControllerParameter[countParameters];
-        //parameterNames = new string[countParametersAnimator];
-        //parameterInformations = new string[countParametersAnimator];
-        //countParameters = countParametersAnimator + variableTestInformations.Length;
+        {
+            //animator = GetComponent<Animator>();
+            //countParametersAnimator = animator.parameterCount;
+            //animatorControllerParameters = new AnimatorControllerParameter[countParameters];
+            //parameterNames = new string[countParametersAnimator];
+            //parameterInformations = new string[countParametersAnimator];
+            //countParameters = countParametersAnimator + variableTestInformations.Length;
+        }
 
         movementController = GetComponent<MovementController>();
         inputController = GetComponent<InputController>();
-        fireController = GetComponent<FireController>();
+        shootController = GetComponent<ShootController>();
     }
     
     // Update is called once per frame
@@ -87,7 +89,11 @@ public class MainCharacterAnimator : MonoBehaviour
         state = animator.GetCurrentAnimatorStateInfo(0);
         //hashName = animator.GetAnimatorTransitionInfo(0).nameHash;
 
-        animator.SetBool("isAim", (inputController.isAim));
+        //Change aim animator parameter when right mouse down
+        if (inputController.isAim)
+        {
+            animator.SetBool("isAim", !animator.GetBool("isAim"));
+        }
         animator.SetBool("isManipulationFire", inputController.isManipulationFire);
         animator.SetFloat("vertical", inputController.vertical);
         animator.SetFloat("horizontal", inputController.horizontal);
@@ -115,8 +121,8 @@ public class MainCharacterAnimator : MonoBehaviour
             {
                 currentFireAnimation = "single";
 
-                weaponAnimators[0].SetBool("isFire", true);
-                animator.SetBool("isFire", true);
+                weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
+                animator.SetBool("isFire", true && shootController.isFire);
                 animator.SetFloat("fireValue", 0);
                 animator.SetFloat("fireRate", 1);
 
@@ -130,10 +136,10 @@ public class MainCharacterAnimator : MonoBehaviour
             {
                 currentFireAnimation = "auto";
 
-                weaponAnimators[0].SetBool("isFire", true);
-                animator.SetBool("isFire", true);
+                weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
+                animator.SetBool("isFire", true && shootController.isFire);
                 animator.SetFloat("fireValue", 1);
-                animator.SetFloat("fireRate", fireController.fireRate / 50);
+                animator.SetFloat("fireRate", shootController.fireRate / 50);
             }
         }
 
@@ -198,7 +204,7 @@ public class MainCharacterAnimator : MonoBehaviour
 
     public IEnumerator ApllyFireRateAnimation()
     {
-        yield return new WaitForSeconds(1/fireController.fireRate);
+        yield return new WaitForSeconds(1/ shootController.fireRate);
         endFireSession = true;
     }
     
@@ -215,15 +221,14 @@ public class MainCharacterAnimator : MonoBehaviour
         if (inputController.fireValue > 0)
         {
             endFireAnimation = false;
-            animator.SetBool("isFire", true);
-            weaponAnimators[0].SetBool("isFire", true);
+            animator.SetBool("isFire", true && shootController.isFire);
+            weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
         }
         else
         {
             endFireAnimation = true;
             animator.SetBool("isFire", false);
             weaponAnimators[0].SetBool("isFire", false);
-            //Debug.Log("end is" + endFireAnimation + " " + inputController.fireValue);
         }
         //if (!Input.GetMouseButton(0))
         //{
@@ -241,7 +246,6 @@ public class MainCharacterAnimator : MonoBehaviour
     public IEnumerator HoldFloatJumpAnimation(float timeHoldAnimation)
     {
         yield return new WaitForSeconds(timeHoldAnimation);
-        //Debug.Log("New jump state");
         if (!movementController.isGrounded)
         {
             if (animator.GetFloat("jumpProcessValue") == 1)
@@ -252,7 +256,6 @@ public class MainCharacterAnimator : MonoBehaviour
         else
         {
             animator.SetBool("isJumporFloat", false);
-            //animator.SetFloat("jumpProcessValue", 1);
         }
     }
 
