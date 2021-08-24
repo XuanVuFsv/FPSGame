@@ -8,6 +8,7 @@ public class BulletController : MonoBehaviour
 
 	public Transform casingPrefab;
 	public ParticleSystem hitEffectPrefab;
+	public TrailRenderer bulletTracer;
 	[Range(10, 200)]
 	public float damage;
 	[Range(0, 100)]
