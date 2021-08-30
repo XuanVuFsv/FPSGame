@@ -264,7 +264,7 @@ public class MovementController : MonoBehaviour
                 {
                     isGrounded = true;
                     //UpdateCapsuleCollider(true);
-                    Debug.Log("Not same direction or slope");
+                    //Debug.Log("Not same direction or slope");
                 }
             }
             else

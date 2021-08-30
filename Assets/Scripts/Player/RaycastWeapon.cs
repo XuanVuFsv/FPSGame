@@ -21,7 +21,6 @@ public class RaycastWeapon : MonoBehaviour
     private void Awake()
     {
         layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
-        Debug.Log(layerMask);
     }
 
     public void StartFiring()
@@ -41,10 +40,9 @@ public class RaycastWeapon : MonoBehaviour
 
         if (Physics.Raycast(raycastOrigin.position, fpsCameraTransform.forward, out hit, range, layerMask))
         {
-            BulletController.Instance.hitEffectPrefab.Emit(1);
-
             BulletController.Instance.hitEffectPrefab.transform.position = hit.point;
             BulletController.Instance.hitEffectPrefab.transform.forward = hit.normal;
+            BulletController.Instance.hitEffectPrefab.Emit(10);
 
             tracer.transform.position = hit.point;
             //Debug.Log(hit.point + " " + hit.transform.name);           
