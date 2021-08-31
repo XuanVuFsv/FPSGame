@@ -83,58 +83,61 @@ public class ShootController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //If out of ammo
-        if (currentAmmo == 0)
+        if (ActiveWeapon.Instance.isHoldWeapon) //only when test pickup weapon system
         {
-            //Toggle bool
-            outOfAmmo = true;
-            isFire = false;
-            //Auto reload if true
-            if (autoReload == true && !isReloading)
+            //If out of ammo
+            if (currentAmmo == 0)
             {
+                //Toggle bool
+                outOfAmmo = true;
+                isFire = false;
+                //Auto reload if true
+                if (autoReload == true && !isReloading)
+                {
+                    StartCoroutine(Reload());
+                }
+            }
+            else
+            {
+                //Toggle bool
+                outOfAmmo = false;
+            }
+
+            if ((Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)) && !outOfAmmo && !isReloading)
+            {
+                //Shoot automatic
+                if (Time.time - lastFired > 1 / fireRate)
+                {
+                    lastFired = Time.time;
+
+                    //Remove 1 bullet from ammo
+                    currentAmmo -= 1;
+
+                    //Control muzzle flash
+                    if (!inputController.isAim) //if not aiming
+                    {
+                    }
+                    else //if aiming
+                    {
+                    }
+
+                    isFire = true;
+                    raycastWeapon.StartFiring();
+                }
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                isFire = false;
+                raycastWeapon.StopFiring();
+            }
+
+            //Reload 
+            if (inputController.isReload && !isReloading)
+            {
+                //Reload
                 StartCoroutine(Reload());
             }
-        }
-        else
-        {
-            //Toggle bool
-            outOfAmmo = false;
-        }
-
-        if ((Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)) && !outOfAmmo && !isReloading)
-        {
-            //Shoot automatic
-            if (Time.time - lastFired > 1 / fireRate)
-            {
-                lastFired = Time.time;
-
-                //Remove 1 bullet from ammo
-                currentAmmo -= 1;
-
-                //Control muzzle flash
-                if (!inputController.isAim) //if not aiming
-                {
-                }
-                else //if aiming
-                {
-                }
-
-                isFire = true;
-                raycastWeapon.StartFiring();
-            }
-        }
-        
-        if (Input.GetMouseButtonUp(0))
-        {
-            isFire = false;
-            raycastWeapon.StopFiring();
-        }
-
-        //Reload 
-        if (inputController.isReload && !isReloading)
-        {
-            //Reload
-            StartCoroutine(Reload());
         }
     }
 

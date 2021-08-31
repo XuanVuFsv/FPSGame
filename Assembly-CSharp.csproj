@@ -77,6 +77,7 @@
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\NamePickGui.cs" />
     <Compile Include="Assets\Low Poly FPS Pack - Free (Sample)\Components\Scripts\Casings_&amp;_Projectiles\CasingScript.cs" />
     <Compile Include="Assets\Low Poly FPS Pack - Free (Sample)\Components\Scripts\Explosions_&amp;_Impacts\ExplosionScript.cs" />
+    <Compile Include="Assets\Scripts\Weapon\PickUpWeapon.cs" />
     <Compile Include="Assets\Low Poly FPS Pack - Free (Sample)\Components\Scripts\Explosions_&amp;_Impacts\ImpactScript.cs" />
     <Compile Include="Assets\Scripts\Player\RaycastWeapon.cs" />
     <Compile Include="Assets\Scripts\UIGameTest.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\EventSystemSpawner.cs" />
     <Compile Include="Assets\Scripts\Camera\CinemachinePOVExtension.cs" />
     <Compile Include="Assets\Scripts\Player\JumpChecker.cs" />
+    <Compile Include="Assets\Scripts\Weapon\ActiveWeapon.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\FriendItem.cs" />
     <Compile Include="Assets\Scripts\Player\MainCharacterAnimator.cs" />
     <Compile Include="Assets\Networking\MultiPlayerManager.cs" />
@@ -97,13 +99,12 @@
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\ChatGui.cs" />
     <Compile Include="Assets\Low Poly FPS Pack - Free (Sample)\Components\Scripts\Misc\LookAtCamera.cs" />
     <Compile Include="Assets\Low Poly FPS Pack - Free (Sample)\Components\Scripts\Weapon_Scripts\HandgunScriptLPFP.cs" />
+    <Compile Include="Assets\Scripts\Weapon\BulletController.cs" />
     <Compile Include="Assets\Effect\Misc Effects\Scripts\SpawnEffect.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\TextToggleIsOnTransition.cs" />
     <Compile Include="Assets\Test.cs" />
     <Compile Include="Assets\Scripts\TransformFunctionality.cs" />
-    <Compile Include="Assets\Scripts\Weapon\GunAnimatorController.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
-    <Compile Include="Assets\Scripts\Weapon\BulletController.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Samples\Terrain Tools\0.1.0-preview\Terrain Assets\ThirdPartyNotices.txt" />

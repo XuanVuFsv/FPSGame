@@ -18,7 +18,7 @@ public class RaycastWeapon : MonoBehaviour
     RaycastHit hit;
     int layerMask;
 
-    private void Awake()
+    private void Start()
     {
         layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
     }

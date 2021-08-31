@@ -21,7 +21,7 @@ public class UIGameTest : MonoBehaviour
 
     private void Awake()
     {
-        Application.targetFrameRate = targetFrameRate;
+        //Application.targetFrameRate = targetFrameRate;
     }
 
     // Update is called once per frame

@@ -114,54 +114,58 @@ public class MainCharacterAnimator : MonoBehaviour
         #endregion
 
         #region Shoot
-        if (endFireSession)
+        if (ActiveWeapon.Instance.isHoldWeapon) // only when test pickup weapon system
         {
-            //Single Shoot
-            if (Input.GetMouseButtonDown(0) && endFireAnimation)
+            if (endFireSession)
             {
-                currentFireAnimation = "single";
+                //Single Shoot
+                if (Input.GetMouseButtonDown(0) && endFireAnimation)
+                {
+                    currentFireAnimation = "single";
 
-                weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
-                animator.SetBool("isFire", true && shootController.isFire);
-                animator.SetFloat("fireValue", 0);
-                animator.SetFloat("fireRate", 1);
+                    //weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
+                    animator.SetBool("isFire", true && shootController.isFire);
+                    animator.SetFloat("fireValue", 0);
+                    animator.SetFloat("fireRate", 1);
 
-                endFireSession = false;
-                endFireAnimation = false;
+                    endFireSession = false;
+                    endFireAnimation = false;
 
-                StartCoroutine(ApllyFireRateAnimation());
-                StartCoroutine(EndSingleFireAnimation());
+                    StartCoroutine(ApllyFireRateAnimation());
+                    StartCoroutine(EndSingleFireAnimation());
+                }
+                else if (Input.GetMouseButton(0) && inputController.fireValue == 2)
+                {
+                    currentFireAnimation = "auto";
+
+                    //weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
+                    animator.SetBool("isFire", true && shootController.isFire);
+                    animator.SetFloat("fireValue", 1);
+                    animator.SetFloat("fireRate", shootController.fireRate / 50);
+                }
             }
-            else if (Input.GetMouseButton(0) && inputController.fireValue == 2)
+
+            if (!Input.GetMouseButtonDown(0) && !Input.GetMouseButton(0) && (inputController.fireValue == 0))
             {
-                currentFireAnimation = "auto";
+                currentFireAnimation = "none";
+                animator.SetBool("isFire", false);
+                //weaponAnimators[0].SetBool("isFire", false);
+                endFireAnimation = true;
+            }
 
-                weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
-                animator.SetBool("isFire", true && shootController.isFire);
-                animator.SetFloat("fireValue", 1);
-                animator.SetFloat("fireRate", shootController.fireRate / 50);
+            if (!Input.anyKey && !Input.anyKeyDown && !inLongIdle && isEndChangeAnimationIdleCoroutine)
+            {
+                startCoroutine += StartChangeIdleAnimationCorroutine;
+                startCoroutine(ChangeIdleAnimation());
+            }
+            else if (Input.anyKeyDown || Input.anyKey)
+            {
+                startCoroutine = null;
+                inLongIdle = false;
+                animator.SetBool("isIdle2", false);
             }
         }
 
-        if (!Input.GetMouseButtonDown(0) && !Input.GetMouseButton(0) && (inputController.fireValue == 0))
-        {
-            currentFireAnimation = "none";
-            animator.SetBool("isFire", false);
-            weaponAnimators[0].SetBool("isFire", false);
-            endFireAnimation = true;
-        }
-
-        if (!Input.anyKey && !Input.anyKeyDown && !inLongIdle && isEndChangeAnimationIdleCoroutine)
-        {
-            startCoroutine += StartChangeIdleAnimationCorroutine;
-            startCoroutine(ChangeIdleAnimation());
-        }
-        else if (Input.anyKeyDown || Input.anyKey)
-        {
-            startCoroutine = null;
-            inLongIdle = false;
-            animator.SetBool("isIdle2", false);
-        }
         #endregion
 
         #region Update Animator Value
@@ -222,13 +226,13 @@ public class MainCharacterAnimator : MonoBehaviour
         {
             endFireAnimation = false;
             animator.SetBool("isFire", true && shootController.isFire);
-            weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
+            //weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
         }
         else
         {
             endFireAnimation = true;
             animator.SetBool("isFire", false);
-            weaponAnimators[0].SetBool("isFire", false);
+            //weaponAnimators[0].SetBool("isFire", false);
         }
         //if (!Input.GetMouseButton(0))
         //{
