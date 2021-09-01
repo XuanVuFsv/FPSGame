@@ -18,25 +18,21 @@ public class MainCharacterAnimator : MonoBehaviour
     private bool inLongIdle = false;
     [SerializeField]
     private bool isEndChangeAnimationIdleCoroutine = true;
-    //float idleValue = 0;
 
     [SerializeField]
     private bool endFireSession = true;
     [SerializeField]
     private bool endFireAnimation = true;
     [SerializeField]
-    string currentFireAnimation;
+    private string currentFireAnimation;
     [SerializeField]
-    float timeEndFireAnimation = 1f;
-    //[SerializeField]
-    //private  int hashName;
+    private float timeEndFireAnimation = 1f;
 
     private InputController inputController;
     private ShootController shootController;
     private AnimatorStateInfo state;
     private IEnumerator changeIdleAnimationCorroutine;
     private bool inTransition, inIdle, inWalk, inJump;
-    //int value = 0;
 
     delegate void ControlIdleAnimationCoroutine(IEnumerator corountine);
     private ControlIdleAnimationCoroutine startCoroutine = null;
@@ -87,7 +83,6 @@ public class MainCharacterAnimator : MonoBehaviour
     {
         #region Basic Animation Properties
         state = animator.GetCurrentAnimatorStateInfo(0);
-        //hashName = animator.GetAnimatorTransitionInfo(0).nameHash;
 
         //Change aim animator parameter when right mouse down
         if (inputController.isAim)
@@ -214,13 +209,6 @@ public class MainCharacterAnimator : MonoBehaviour
     
     public IEnumerator EndSingleFireAnimation()
     {
-        //if (fireController.fireRate > 1 / 1.167f)
-        //{
-        //    timeEndAnimation = 1 / fireController.fireRate;
-        //}
-
-        //Debug.Log("Start");
-
         yield return new WaitForSeconds(timeEndFireAnimation);
         if (inputController.fireValue > 0)
         {

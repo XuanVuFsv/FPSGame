@@ -63,27 +63,32 @@ public class ActiveWeapon : MonoBehaviour
     public void EquipWeapon(Transform newWeapon)
     {
         currentWeapon = newWeapon;
-        if (currentWeapon.GetComponent<Rigidbody>()) Destroy(currentWeapon.GetComponent<Rigidbody>());
+        currentWeapon.gameObject.GetComponent<WeaponPickup>().noParent = false;
+        if (currentWeapon.gameObject.GetComponent<Rigidbody>()) Destroy(currentWeapon.GetComponent<Rigidbody>());
 
+        currentWeapon.parent = weaponPivot;
+        currentWeapon.localPosition = Vector3.zero;
+        currentWeapon.localEulerAngles = new Vector3(272f, 155f, 180);
         isHoldWeapon = true;
         handIk.weight = 1.0f;
-
-        SetupNewWeapon();
     }
 
     public void DropWeapon()
     {
-        currentWeapon.gameObject.AddComponent<Rigidbody>().AddForce(currentWeapon.forward * 0.05f, ForceMode.VelocityChange);
-        Destroy(currentWeapon.GetComponent<Rigidbody>(), 10);
+        currentWeapon.gameObject.AddComponent<Rigidbody>().AddForce(currentWeapon.forward * 5f, ForceMode.VelocityChange);
+        Destroy(currentWeapon.gameObject.GetComponent<Rigidbody>(), 5);
+
         currentWeapon.parent = null;
-        currentWeapon = null;
 
         isHoldWeapon = false;
         handIk.weight = 0.0f;
     }
 
-    public void SetupNewWeapon()
+    public void SetupNewWeapon(WeaponStats weaponStats)
     {
-
+        ShootController shootController = GetComponent<ShootController>();
+        shootController.fireRate = weaponStats.fireRate;
+        shootController.raycastWeapon = currentWeapon.GetComponent<RaycastWeapon>();
+        currentWeapon.gameObject.GetComponent<WeaponPickup>().noParent = true;
     }
 }

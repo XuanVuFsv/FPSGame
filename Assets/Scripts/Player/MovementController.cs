@@ -20,27 +20,27 @@ public class MovementController : MonoBehaviour
     public bool HasJumpedThisFrame { get; private set; }
 
     [SerializeField]
-    Transform followTargetTransform;
+    private Transform followTargetTransform;
     [SerializeField]
-    new Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
     [SerializeField]
-    Vector3 movementVector;
+    private Vector3 movementVector;
     [SerializeField]
-    Vector3 turnSpeed;
+    private Vector3 turnSpeed;
     [SerializeField]
-    Vector2 limitAngleY; // properties: x is min value y is max value
+    private Vector2 limitAngleY; // properties: x is min value y is max value
     [SerializeField]
-    float rotationLerp = 0.5f;
+    private float rotationLerp = 0.5f;
     [SerializeField]
-    float m_LastTimeJumped = 0;
+    private float m_LastTimeJumped = 0;
     [SerializeField]
-    string collisonCollider;
+    private string collisonCollider;
 
-    InputController inputController;
-    CapsuleCollider capsuleCollider;
-    MainCharacterAnimator mainCharacterAnimator;
-    CameraController cameraController;
-    Vector3 m_GroundNormal;
+    private InputController inputController;
+    private CapsuleCollider capsuleCollider;
+    private MainCharacterAnimator mainCharacterAnimator;
+    private CameraController cameraController;
+    private Vector3 m_GroundNormal;
 
     const float k_GroundCheckDistanceInAir = 0.07f;
 
@@ -106,98 +106,6 @@ public class MovementController : MonoBehaviour
         //cubeRigidbody.transform.Rotate(Vector3.forward * forceTest);
         #endregion
     }
-
-    //void ModifyOnFire()
-    //{
-    //    //var eulerAngles = body.localEulerAngles;
-    //    if (inputController.in && !isRotateOnFire)
-    //    {
-    //        //eulerAngles.y = 35;
-    //        body.Rotate(0, -17, 0);
-    //        isRotateOnFire = true;
-
-    //    }
-    //    else if (!inputController.isManipulationFire && isRotateOnFire)
-    //    {
-    //        //eulerAngles.y = 18;
-    //        body.Rotate(0, 17, 0);
-    //        isRotateOnFire = false;
-    //    }
-    //    //body.localEulerAngles = eulerAngles;
-    //}
-
-    //void UpdateFollowTarget()
-    //{
-    //    #region Follow Transform Rotation
-
-    //    //Rotate the Follow Target transform based on the input
-    //    followTargetTransform.transform.rotation *= Quaternion.AngleAxis(inputController.look.x * turnSpeed.y, Vector3.up);
-
-    //    #endregion
-
-    //    #region Vertical Rotation
-    //    followTargetTransform.transform.rotation *= Quaternion.AngleAxis(inputController.look.y * turnSpeed.x, Vector3.right);
-
-    //    var angles = followTargetTransform.transform.localEulerAngles;
-    //    angles.z = 0;
-
-    //    var angle = followTargetTransform.transform.localEulerAngles.x;
-
-    //    //Clamp the Up/Down rotation
-    //    if (angle > 180 && angle < limitAngleY.y)
-    //    {
-    //        angles.x = limitAngleY.y;
-    //    }
-    //    else if (angle < 180 && angle > limitAngleY.x)
-    //    {
-    //        angles.x = limitAngleY.x;
-    //    }
-
-    //    followTargetTransform.transform.localEulerAngles = angles;
-    //    #endregion
-
-    //    nextRotation = Quaternion.Lerp(followTargetTransform.transform.rotation, nextRotation, Time.deltaTime * rotationLerp);
-
-    //    if (inputController.move.x == 0 && inputController.move.y == 0)
-    //    {
-
-    //        //if (aimValue == 1)
-    //        //{
-    //        //    //Set the player rotation based on the look transform
-    //        //    transform.rotation = Quaternion.Euler(0, followTransform.transform.rotation.eulerAngles.y, 0);
-    //        //    //reset the y rotation of the look transform
-    //        //    followTransform.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
-    //        //}
-
-    //        return;
-    //    }
-
-    //    //Set the player rotation based on the look transform
-    //    transform.rotation = Quaternion.Euler(0, followTargetTransform.transform.rotation.eulerAngles.y, 0);
-    //    //reset the y rotation of the look transform
-    //    followTargetTransform.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
-    //}
-
-    //void ControlCamera()
-    //{
-    //    //transform.Rotate(Vector3.up, inputController.mouseX * turnSpeed.y * Time.deltaTime);
-    //    //float changeHeadDistance = (headCharacter.transform.localPosition.y + inputController.mouseY * turnSpeed.x * Time.deltaTime);
-    //    //headCharacter.transform.localPosition = new Vector3(headCharacter.transform.localPosition.x, Mathf.Clamp(changeHeadDistance, limitPositionY.x, limitPositionY.y), headCharacter.transform.localPosition.z);
-    //}
-
-    //private void AdjustAnimationByVelocity()
-    //{
-    //    if (rigidbody.velocity.y <= -2f && onAir)
-    //    {
-    //        //mainCharacterAnimator.SetSpeedMultiplierAnimator(0);
-    //        //Debug.Log(rigidbody.velocity.y);
-    //        Time.timeScale = 0;
-    //    }
-    //    else
-    //    {
-    //        //mainCharacterAnimator.SetSpeedMultiplierAnimator(1);
-    //    }
-    //}
 
     void Move()
     {
@@ -310,9 +218,6 @@ public class MovementController : MonoBehaviour
     IEnumerator Jump(float jumpProcessValue)
     {
         readyToJump = false;
-        //allowJump = false;
-        //onGround = false;
-        //onAir = true;
         mainCharacterAnimator.SetJumpAnimationParameter(isGrounded, true, jumpProcessValue, 0.5f);
         StartCoroutine(PreventJump());
         yield return new WaitForSeconds((18 / 31) * (16 / 3)); //play a part of animation before jump t = 8/15 * 0.533 8/15 frame length = 0.533s
