@@ -12,7 +12,7 @@ public class WeaponPickup : MonoBehaviour
         if (other.CompareTag("Player") && noParent)
         {
             ShowWeaponStats();
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.H) || !ActiveWeapon.Instance.isHoldWeapon)
             {
                 ActiveWeapon newActiveWeapon = other.GetComponent<ActiveWeapon>();
                 newActiveWeapon.DropWeapon();
@@ -21,7 +21,7 @@ public class WeaponPickup : MonoBehaviour
             }
         }
     }
-
+    
     public void ShowWeaponStats()
     {
         //Debug.Log(weaponStats.name);

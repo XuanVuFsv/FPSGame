@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 838e92dc6369c0c4d85d36d8de41ed86, type: 3}
+  m_Name: Assault Rifle AK
+  m_EditorClassIdentifier: 
+  name: AK
+  cost: 0
+  penetrattionThickness: 0
+  damageHead: 160
+  damageBody: 40
+  damageArmsLegs: 34
+  dropOffDsitance: 0
+  decreseDamageRate: 0
+  fireRate: 9.75
+  runSpeed: 5.5
+  reloadSpeed: 2.5
+  magazine: 25
+  artwork: {fileID: 0}
+  casingPrefab: {fileID: 4420745226056240, guid: 7be59128a5ee3424faf33d7a408c0b2e, type: 3}
+  bulletTracer: {fileID: 707040024495274455, guid: 569de5555e681b54293fe4001a3613e5, type: 3}
+  hitEffectPrefab: {fileID: 2908678513265010918, guid: 90067e483113a2545a0a1e98714ffb73, type: 3}
