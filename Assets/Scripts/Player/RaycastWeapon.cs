@@ -14,6 +14,8 @@ public class RaycastWeapon : MonoBehaviour
     public ParticleSystem hitEffectPrefab;
     public ParticleSystem muzzleFlash;
 
+    public AnimationClip weaponAnimation;
+
     public float range = 300f;
 
     WeaponStats weaponStats;
@@ -35,6 +37,9 @@ public class RaycastWeapon : MonoBehaviour
         fpsCameraTransform = Camera.main.transform;
         initialSwayPosition = transform.localPosition;
         layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+
+        hitEffectPrefab = Instantiate(weaponStats.hitEffectPrefab, transform);
+        hitEffectPrefab.gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
     public void StartFiring()

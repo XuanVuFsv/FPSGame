@@ -8,12 +8,19 @@ public class ActiveWeapon : MonoBehaviour
     private static ActiveWeapon instance;
 
     ShootController shootController;
+
     public UnityEngine.Animations.Rigging.Rig handIk;
     public Transform weaponPivot;
     public Transform currentWeapon;
+    public Transform parent;
     public Transform rightHandHolder, leftHandHolder;
-    public AnimationClip weaponAnimation;
+    public Transform gunCamera;
     public bool isHoldWeapon = false;
+
+    [SerializeField]
+    Animator animator;
+    [SerializeField]
+    AnimatorOverrideController animatorOverride;
 
     void MakeInstance()
     {
@@ -40,19 +47,25 @@ public class ActiveWeapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = transform.GetChild(0).gameObject.GetComponent<Animator>();
+        animatorOverride = animator.runtimeAnimatorController as AnimatorOverrideController;
+
+        shootController = GetComponent<ShootController>();
+
         foreach (Transform child in weaponPivot.transform)
         {
             if (child.gameObject.tag == "Weapon")
             {
-                EquipWeapon(child);
+                EquipWeapon(child.GetChild(0));
+                SetupNewWeapon(currentWeapon.GetComponent<WeaponPickup>().weaponStats);
                 break;
             }
             else
             {
                 handIk.weight = 0.0f;
+                animator.SetLayerWeight(1, 0.0f);
             }
         }
-        shootController = GetComponent<ShootController>();
     }
     
     // Update is called once per frame
@@ -67,32 +80,43 @@ public class ActiveWeapon : MonoBehaviour
     public void EquipWeapon(Transform newWeapon)
     {
         currentWeapon = newWeapon;
-        if (currentWeapon.gameObject.GetComponent<Rigidbody>()) Destroy(currentWeapon.GetComponent<Rigidbody>());
+        parent = currentWeapon.parent;
 
-        currentWeapon.parent = weaponPivot;
+        parent.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+        parent.parent = weaponPivot;
         currentWeapon.gameObject.GetComponent<WeaponPickup>().noParent = false;
 
-        currentWeapon.localPosition = Vector3.zero;
-        currentWeapon.localEulerAngles = new Vector3(272f, 155f, 180);
+        //parent.localPosition = Vector3.zero;
+
+        SetupUtilities.SetLayers(parent, "Local Player", "Local Player", "Effect");
 
         isHoldWeapon = true;
         handIk.weight = 1.0f;
+        animator.SetLayerWeight(1, 1.0f);
+
+        Invoke(nameof(SetAnimationDelayded), 0.001f);
+
+        //SetAnimationDelayded();
     }
 
     public void DropWeapon()
     {
         if (!isHoldWeapon) return;
 
-        currentWeapon.parent = null;
+        parent.parent = null;
         currentWeapon.gameObject.GetComponent<WeaponPickup>().noParent = true;
 
-        currentWeapon.gameObject.AddComponent<Rigidbody>().AddForce(currentWeapon.forward * 5, ForceMode.VelocityChange);
-        Destroy(currentWeapon.gameObject.GetComponent<Rigidbody>(), 5);
+        parent.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        parent.gameObject.GetComponent<Rigidbody>().AddForce(currentWeapon.forward * 5, ForceMode.VelocityChange);
 
         isHoldWeapon = false;
         handIk.weight = 0.0f;
 
+        SetupUtilities.SetLayers(parent, "Ignore Player", "Default", null);
+
         currentWeapon = null;
+        parent = null;
     }
 
     public void SetupNewWeapon(WeaponStats weaponStats)
@@ -101,14 +125,23 @@ public class ActiveWeapon : MonoBehaviour
         shootController.raycastWeapon = currentWeapon.GetComponent<RaycastWeapon>();
     }
 
+    void SetAnimationDelayded()
+    {
+        Debug.Log(animatorOverride["Weapon Animation Empty"].name + " " + currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation.name);
+        animatorOverride["Weapon Animation Empty"] = currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation;
+        Debug.Log(animatorOverride["Weapon Animation Empty"].name + " " + currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation.name);
+    }
+
     [ContextMenu("Save Weapon Pose")]
     void SaveWeaponPose()
     {
-        GameObjectRecorder recorder = new GameObjectRecorder(gameObject);
+        GameObjectRecorder recorder = new GameObjectRecorder(transform.GetChild(0).gameObject);
         recorder.BindComponentsOfType<Transform>(weaponPivot.gameObject, false);
+        recorder.BindComponentsOfType<Transform>(parent.gameObject, false);
+        recorder.BindComponentsOfType<Transform>(gunCamera.gameObject, false);
         recorder.BindComponentsOfType<Transform>(leftHandHolder.gameObject, false);
         recorder.BindComponentsOfType<Transform>(rightHandHolder.gameObject, false);
         recorder.TakeSnapshot(0.0f);
-        recorder.SaveToClip(weaponAnimation);
+        recorder.SaveToClip(currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation);
     }
 }

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Target
   - Weapon
+  - Effect
+  - DevEnv
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Hidden
   - Local Player
   - Remote Player
-  - IgnorePlayer
+  - Ignore Player
   - 
   - 
   - 
