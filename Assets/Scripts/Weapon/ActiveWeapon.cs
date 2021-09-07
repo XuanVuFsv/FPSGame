@@ -8,6 +8,7 @@ public class ActiveWeapon : MonoBehaviour
     private static ActiveWeapon instance;
 
     ShootController shootController;
+    WeaponPickup weaponPickup;
 
     public UnityEngine.Animations.Rigging.Rig handIk;
     public Transform weaponPivot;
@@ -57,7 +58,7 @@ public class ActiveWeapon : MonoBehaviour
             if (child.gameObject.tag == "Weapon")
             {
                 EquipWeapon(child.GetChild(0));
-                SetupNewWeapon(currentWeapon.GetComponent<WeaponPickup>().weaponStats);
+                SetupNewWeapon(weaponPickup.weaponStats);
                 break;
             }
             else
@@ -82,10 +83,13 @@ public class ActiveWeapon : MonoBehaviour
         currentWeapon = newWeapon;
         parent = currentWeapon.parent;
 
+        weaponPickup = currentWeapon.gameObject.GetComponent<WeaponPickup>();
+        if (weaponPickup.messageWeapon) Destroy(weaponPickup.messageWeapon);
+
         parent.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
         parent.parent = weaponPivot;
-        currentWeapon.gameObject.GetComponent<WeaponPickup>().noParent = false;
+        weaponPickup.noParent = false;
 
         //parent.localPosition = Vector3.zero;
 
@@ -105,7 +109,7 @@ public class ActiveWeapon : MonoBehaviour
         if (!isHoldWeapon) return;
 
         parent.parent = null;
-        currentWeapon.gameObject.GetComponent<WeaponPickup>().noParent = true;
+        weaponPickup.noParent = true;
 
         parent.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         parent.gameObject.GetComponent<Rigidbody>().AddForce(currentWeapon.forward * 5, ForceMode.VelocityChange);

@@ -4,14 +4,22 @@ using UnityEngine;
 
 public class WeaponPickup : MonoBehaviour
 {
+    public RectTransform messageWeaponPrefab, messageWeapon;
     public WeaponStats weaponStats;
-    public bool noParent = true;
     public Vector3 viewPortPoint;
+    public bool noParent = true;
+
+    public bool isCollideWithPlayer;
+    public string collideName;
 
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player") && noParent)
         {
+            collideName = other.tag;
+
+            isCollideWithPlayer = true;
+
             viewPortPoint = Camera.main.WorldToViewportPoint(transform.position);
 
             if (WeaponInPickupViewPort())
@@ -26,8 +34,16 @@ public class WeaponPickup : MonoBehaviour
                 }
             }
         }
+        else if (!isCollideWithPlayer && noParent)
+        {
+            Debug.Log(transform.parent.gameObject.name + ": " + other.name + " " + other.tag);
+            isCollideWithPlayer = false;
+        }
+        //isCollideWithPlayer = false;
+
+        //if (messageWeapon) messageWeapon.gameObject.SetActive(false);
     }
-    
+
     bool WeaponInPickupViewPort()
     {       
         if (viewPortPoint.z < 2 && Mathf.Abs(viewPortPoint.x - 0.5f) < 0.375f && Mathf.Abs(viewPortPoint.y - 0.5f) < 0.375f)
@@ -39,6 +55,12 @@ public class WeaponPickup : MonoBehaviour
 
     public void ShowWeaponStats()
     {
-        //Debug.Log(weaponStats.name);
+        if (messageWeapon)
+        {
+            messageWeapon.gameObject.SetActive(true);
+            return;
+        }
+        messageWeapon = Instantiate(messageWeaponPrefab, transform.parent);
+        messageWeapon.GetChild(0).GetComponent<WeaponUI>().message.text += weaponStats.name;
     }
 }
