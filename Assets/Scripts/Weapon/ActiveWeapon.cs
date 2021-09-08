@@ -84,7 +84,7 @@ public class ActiveWeapon : MonoBehaviour
         parent = currentWeapon.parent;
 
         weaponPickup = currentWeapon.gameObject.GetComponent<WeaponPickup>();
-        if (weaponPickup.messageWeapon) Destroy(weaponPickup.messageWeapon);
+        if (weaponPickup.weaponUI) weaponPickup.weaponUI.gameObject.SetActive(true);
 
         parent.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
@@ -112,12 +112,12 @@ public class ActiveWeapon : MonoBehaviour
         weaponPickup.noParent = true;
 
         parent.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-        parent.gameObject.GetComponent<Rigidbody>().AddForce(currentWeapon.forward * 5, ForceMode.VelocityChange);
+        parent.gameObject.GetComponent<Rigidbody>().AddForce(currentWeapon.forward, ForceMode.Impulse);
 
         isHoldWeapon = false;
         handIk.weight = 0.0f;
 
-        SetupUtilities.SetLayers(parent, "Ignore Player", "Default", null);
+        SetupUtilities.SetLayers(parent, "Ignore Player", "Only Player", null);
 
         currentWeapon = null;
         parent = null;

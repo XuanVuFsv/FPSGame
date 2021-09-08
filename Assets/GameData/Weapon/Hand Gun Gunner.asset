@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 838e92dc6369c0c4d85d36d8de41ed86, type: 3}
   m_Name: Hand Gun Gunner
   m_EditorClassIdentifier: 
-  name: Hand Gun Gunner
+  name: GUNNER
   cost: 0
   penetrattionThickness: 0
   damageHead: 140
