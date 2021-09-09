@@ -10,16 +10,50 @@ public class WeaponPickup : MonoBehaviour
     public bool noParent = true;
     public bool canPickup = false;
 
+    ActiveWeapon activeWeapon;
+
+    static int standardLengthWeponName = 4;
+    static float offsetPerOverLetter = 0.5f;
+    
+
+    private void Start()
+    {
+        if (noParent)
+        {
+            CreateWeaponUI();
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player") && noParent)
         {
             viewPortPoint = Camera.main.WorldToViewportPoint(transform.position);
+            if (activeWeapon == null) activeWeapon = other.GetComponent<ActiveWeapon>();
 
             if (WeaponInPickupViewPort())
             {
-                canPickup = true;
-                ShowWeaponStats();
+                if (!weaponUI)
+                {
+                    CreateWeaponUI();
+                }
+
+                if (!canPickup)
+                {
+                    if (viewPortPoint.z < activeWeapon.minDistanceToWeapon || activeWeapon.countWeponInArea == 0)
+                    {
+                        Debug.Log(viewPortPoint.z + weaponStats.name);
+                        canPickup = true;
+                        activeWeapon.minDistanceToWeapon = viewPortPoint.z;
+                        activeWeapon.countWeponInArea++;
+                    }
+                    else
+                    {
+                        weaponUI.gameObject.SetActive(false);
+                    }
+
+                    ShowWeaponStats();
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.H) && canPickup)
@@ -36,14 +70,18 @@ public class WeaponPickup : MonoBehaviour
     {
         if (other.CompareTag("Player") && noParent)
         {
-            if (weaponUI) weaponUI.gameObject.SetActive(false);
+            if (activeWeapon.countWeponInArea > 0) activeWeapon.countWeponInArea--;
+            activeWeapon = null;
+
+            Debug.Log("Exit" + weaponStats.name);
+            weaponUI.gameObject.SetActive(false);
             canPickup = false;
         }
     }
 
     bool WeaponInPickupViewPort()
     {
-        if (viewPortPoint.z < 2.5f && Mathf.Abs(viewPortPoint.x - 0.5f) < 0.4f && Mathf.Abs(viewPortPoint.y - 0.5f) < 0.4f)
+        if (viewPortPoint.z < 2.5f && Mathf.Abs(viewPortPoint.x - 0.5f) < 0.2f && Mathf.Abs(viewPortPoint.y - 0.5f) < 0.2f)
         {
             return true;
         }
@@ -52,14 +90,19 @@ public class WeaponPickup : MonoBehaviour
 
     public void ShowWeaponStats()
     {
-        if (weaponUI)
-        {
-            weaponUI.gameObject.SetActive(true);
-            return;
-        }
+        weaponUI.gameObject.SetActive(true);
+        weaponUI.GetChild(0).GetComponent<WeaponUI>().weaponName.text = weaponStats.name;
+    }
+
+    public void CreateWeaponUI()
+    {
+        Debug.Log("CREATE WEAPON UI FOR " + weaponStats.name);
         weaponUI = Instantiate(weaponUIPrefab, transform.parent);
         weaponUI.localScale = CalcualteLocalScale(0.19f, 0.19f, 0.19f, transform.parent.localScale);
-        weaponUI.GetChild(0).GetComponent<WeaponUI>().message.text += weaponStats.name;
+        int multiplier = weaponStats.name.Length - standardLengthWeponName;
+        if (multiplier > 0) weaponUI.GetChild(0).GetComponent<WeaponUI>().panel.localPosition -= offsetPerOverLetter * multiplier * Vector3.right;
+
+        weaponUI.gameObject.SetActive(false);
     }
 
     Vector3 CalcualteLocalScale(float x, float y, float z, Vector3 parentScale)

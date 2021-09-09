@@ -16,6 +16,7 @@ public class ActiveWeapon : MonoBehaviour
     public Transform parent;
     public Transform rightHandHolder, leftHandHolder;
     public Transform gunCamera;
+    public float minDistanceToWeapon = 5, countWeponInArea = 0;
     public bool isHoldWeapon = false;
 
     [SerializeField]
@@ -80,47 +81,54 @@ public class ActiveWeapon : MonoBehaviour
 
     public void EquipWeapon(Transform newWeapon)
     {
+        //Set current weapon and its parent
         currentWeapon = newWeapon;
         parent = currentWeapon.parent;
 
+        SetupUtilities.SetLayers(parent, "Local Player", "Local Player", "Effect");
+
+        //Ref weaponpickup of wepon and disable UI
         weaponPickup = currentWeapon.gameObject.GetComponent<WeaponPickup>();
-        if (weaponPickup.weaponUI) weaponPickup.weaponUI.gameObject.SetActive(true);
+        if (weaponPickup.weaponUI) weaponPickup.weaponUI.gameObject.SetActive(false);
 
         parent.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
+        //Set parent for weapon and change noParent value
         parent.parent = weaponPivot;
         weaponPickup.noParent = false;
 
-        //parent.localPosition = Vector3.zero;
-
-        SetupUtilities.SetLayers(parent, "Local Player", "Local Player", "Effect");
-
+        //Animation setup
         isHoldWeapon = true;
         handIk.weight = 1.0f;
         animator.SetLayerWeight(1, 1.0f);
 
         Invoke(nameof(SetAnimationDelayded), 0.001f);
-
-        //SetAnimationDelayded();
     }
 
     public void DropWeapon()
     {
         if (!isHoldWeapon) return;
 
+        //Set parent for weapon and change noParent value
         parent.parent = null;
         weaponPickup.noParent = true;
 
-        parent.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-        parent.gameObject.GetComponent<Rigidbody>().AddForce(currentWeapon.forward, ForceMode.Impulse);
-
-        isHoldWeapon = false;
-        handIk.weight = 0.0f;
-
         SetupUtilities.SetLayers(parent, "Ignore Player", "Only Player", null);
 
+        parent.localEulerAngles = Vector3.zero;
+        parent.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        //parent.gameObject.GetComponent<Rigidbody>().AddForce(currentWeapon.forward, ForceMode.Impulse);
+
+        //Animation setup
+        isHoldWeapon = false;
+        animatorOverride["Weapon Animation Empty"] = null;
+        handIk.weight = 0.0f;
+        animator.SetLayerWeight(1, 0.0f);
+
+        //Set current weapon, weapon pickup and its parent
         currentWeapon = null;
         parent = null;
+        weaponPickup = null;
     }
 
     public void SetupNewWeapon(WeaponStats weaponStats)
@@ -131,9 +139,7 @@ public class ActiveWeapon : MonoBehaviour
 
     void SetAnimationDelayded()
     {
-        Debug.Log(animatorOverride["Weapon Animation Empty"].name + " " + currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation.name);
         animatorOverride["Weapon Animation Empty"] = currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation;
-        Debug.Log(animatorOverride["Weapon Animation Empty"].name + " " + currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation.name);
     }
 
     [ContextMenu("Save Weapon Pose")]

@@ -5,7 +5,8 @@ using TMPro;
 
 public class WeaponUI : MonoBehaviour
 {
-    public TMP_Text message;
+    public TMP_Text weaponName;
+    public RectTransform panel;
     
     // Update is called once per frame
     void Update()
