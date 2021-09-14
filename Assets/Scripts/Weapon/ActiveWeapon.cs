@@ -8,6 +8,7 @@ public class ActiveWeapon : MonoBehaviour
     private static ActiveWeapon instance;
 
     ShootController shootController;
+    [SerializeField]
     WeaponPickup weaponPickup;
 
     public UnityEngine.Animations.Rigging.Rig handIk;
@@ -20,9 +21,11 @@ public class ActiveWeapon : MonoBehaviour
     public bool isHoldWeapon = false;
 
     [SerializeField]
-    Animator animator;
-    [SerializeField]
-    AnimatorOverrideController animatorOverride;
+    Animator rigController;
+    //[SerializeField]
+    //Animator animator;
+    //[SerializeField]
+    //AnimatorOverrideController animatorOverride;
 
     void MakeInstance()
     {
@@ -49,8 +52,8 @@ public class ActiveWeapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animator = transform.GetChild(0).gameObject.GetComponent<Animator>();
-        animatorOverride = animator.runtimeAnimatorController as AnimatorOverrideController;
+        //animator = transform.GetChild(0).gameObject.GetComponent<Animator>();
+        //animatorOverride = animator.runtimeAnimatorController as AnimatorOverrideController;
 
         shootController = GetComponent<ShootController>();
 
@@ -64,8 +67,8 @@ public class ActiveWeapon : MonoBehaviour
             }
             else
             {
-                handIk.weight = 0.0f;
-                animator.SetLayerWeight(1, 0.0f);
+                //handIk.weight = 0.0f;
+                //animator.SetLayerWeight(1, 0.0f);
             }
         }
     }
@@ -99,10 +102,13 @@ public class ActiveWeapon : MonoBehaviour
 
         //Animation setup
         isHoldWeapon = true;
-        handIk.weight = 1.0f;
-        animator.SetLayerWeight(1, 1.0f);
+        rigController.Rebind();
+        rigController.Play("Base Layer.Equip " + weaponPickup.weaponStats.name, 0, 0f);
 
-        Invoke(nameof(SetAnimationDelayded), 0.001f);
+        //handIk.weight = 1.0f;
+        //animator.SetLayerWeight(1, 1.0f);
+
+        //Invoke(nameof(SetAnimationDelayded), 0.001f);
     }
 
     public void DropWeapon()
@@ -121,9 +127,14 @@ public class ActiveWeapon : MonoBehaviour
 
         //Animation setup
         isHoldWeapon = false;
-        animatorOverride["Weapon Animation Empty"] = null;
-        handIk.weight = 0.0f;
-        animator.SetLayerWeight(1, 0.0f);
+        //animatorOverride["Weapon Animation Empty"] = null;
+        //handIk.weight = 0.0f;
+        //animator.SetLayerWeight(1, 0.0f);
+
+        if (!weaponPickup.weaponUI)
+        {
+            weaponPickup.CreateWeaponUI();
+        }
 
         //Set current weapon, weapon pickup and its parent
         currentWeapon = null;
@@ -139,13 +150,16 @@ public class ActiveWeapon : MonoBehaviour
 
     void SetAnimationDelayded()
     {
-        animatorOverride["Weapon Animation Empty"] = currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation;
+        //Debug.Log("Equip ");
+        //rigController.Play("Equip " + weaponPickup.weaponStats.name);
+        //animatorOverride["Weapon Animation Empty"] = currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation;
     }
 
     [ContextMenu("Save Weapon Pose")]
     void SaveWeaponPose()
     {
         GameObjectRecorder recorder = new GameObjectRecorder(transform.GetChild(0).gameObject);
+        //GameObjectRecorder recorder = new GameObjectRecorder(rigController.gameObject);
         recorder.BindComponentsOfType<Transform>(weaponPivot.gameObject, false);
         recorder.BindComponentsOfType<Transform>(parent.gameObject, false);
         recorder.BindComponentsOfType<Transform>(gunCamera.gameObject, false);

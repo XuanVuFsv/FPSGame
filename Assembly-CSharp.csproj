@@ -108,6 +108,7 @@
     <Compile Include="Assets\Scripts\TransformFunctionality.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
     <Compile Include="Assets\Scripts\SetupUtilities.cs" />
+    <Compile Include="Assets\Scripts\SaveWeaponAnimation.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Samples\Terrain Tools\0.1.0-preview\Terrain Assets\ThirdPartyNotices.txt" />

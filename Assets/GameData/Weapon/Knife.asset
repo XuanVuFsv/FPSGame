@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 838e92dc6369c0c4d85d36d8de41ed86, type: 3}
+  m_Name: Knife
+  m_EditorClassIdentifier: 
+  name: Knife
+  cost: 0
+  penetrattionThickness: 0
+  damageHead: 80
+  damageBody: 75
+  damageArmsLegs: 70
+  dropOffDsitance: 0
+  decreseDamageRate: 0
+  fireRate: 1.5
+  runSpeed: 4.5
+  reloadSpeed: 0
+  magazine: -1
+  artwork: {fileID: 0}
+  casingPrefab: {fileID: 4000013488956786, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
+  bulletTracer: {fileID: 707040024495274455, guid: 569de5555e681b54293fe4001a3613e5, type: 3}
+  hitEffectPrefab: {fileID: 198000011254678926, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}

@@ -96,7 +96,7 @@ public class WeaponPickup : MonoBehaviour
 
     public void CreateWeaponUI()
     {
-        Debug.Log("CREATE WEAPON UI FOR " + weaponStats.name);
+        //Debug.Log("CREATE WEAPON UI FOR " + weaponStats.name);
         weaponUI = Instantiate(weaponUIPrefab, transform.parent);
         weaponUI.localScale = CalcualteLocalScale(0.19f, 0.19f, 0.19f, transform.parent.localScale);
         int multiplier = weaponStats.name.Length - standardLengthWeponName;

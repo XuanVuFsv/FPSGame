@@ -36,7 +36,7 @@ public class RaycastWeapon : MonoBehaviour
         weaponStats = GetComponent<WeaponPickup>().weaponStats;
         fpsCameraTransform = Camera.main.transform;
         initialSwayPosition = transform.localPosition;
-        layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+        layerMask = ~((1 << LayerMask.NameToLayer("Ignore Raycast")) << LayerMask.NameToLayer("Only Player"));
 
         hitEffectPrefab = Instantiate(weaponStats.hitEffectPrefab, transform);
         hitEffectPrefab.gameObject.layer = LayerMask.NameToLayer("Default");
