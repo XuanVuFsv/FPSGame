@@ -42,7 +42,7 @@ public class WeaponPickup : MonoBehaviour
                 {
                     if (viewPortPoint.z < activeWeapon.minDistanceToWeapon || activeWeapon.countWeponInArea == 0)
                     {
-                        Debug.Log(viewPortPoint.z + weaponStats.name);
+                        //Debug.Log(viewPortPoint.z + weaponStats.name);
                         canPickup = true;
                         activeWeapon.minDistanceToWeapon = viewPortPoint.z;
                         activeWeapon.countWeponInArea++;
@@ -73,7 +73,7 @@ public class WeaponPickup : MonoBehaviour
             if (activeWeapon.countWeponInArea > 0) activeWeapon.countWeponInArea--;
             activeWeapon = null;
 
-            Debug.Log("Exit" + weaponStats.name);
+            //Debug.Log("Exit" + weaponStats.name);
             weaponUI.gameObject.SetActive(false);
             canPickup = false;
         }

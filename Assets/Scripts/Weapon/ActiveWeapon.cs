@@ -8,7 +8,6 @@ public class ActiveWeapon : MonoBehaviour
     private static ActiveWeapon instance;
 
     ShootController shootController;
-    [SerializeField]
     WeaponPickup weaponPickup;
 
     public UnityEngine.Animations.Rigging.Rig handIk;
@@ -102,8 +101,7 @@ public class ActiveWeapon : MonoBehaviour
 
         //Animation setup
         isHoldWeapon = true;
-        rigController.Rebind();
-        rigController.Play("Base Layer.Equip " + weaponPickup.weaponStats.name, 0, 0f);
+        SetWeaponAnimation();
 
         //handIk.weight = 1.0f;
         //animator.SetLayerWeight(1, 1.0f);
@@ -146,6 +144,12 @@ public class ActiveWeapon : MonoBehaviour
     {
         shootController.fireRate = weaponStats.fireRate;
         shootController.raycastWeapon = currentWeapon.GetComponent<RaycastWeapon>();
+    }
+
+    void SetWeaponAnimation()
+    {
+        rigController.Rebind();
+        rigController.Play("Base Layer.Equip " + weaponPickup.weaponStats.name, 0, 0f);
     }
 
     void SetAnimationDelayded()
