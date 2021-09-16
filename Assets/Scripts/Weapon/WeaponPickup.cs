@@ -6,6 +6,7 @@ public class WeaponPickup : MonoBehaviour
 {
     public RectTransform weaponUIPrefab, weaponUI;
     public WeaponStats weaponStats;
+    public ActiveWeapon.WeaponSlot weaponSlot;
     public Vector3 viewPortPoint;
     public bool noParent = true;
     public bool canPickup = false;
@@ -59,8 +60,8 @@ public class WeaponPickup : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.H) && canPickup)
             {
                 ActiveWeapon newActiveWeapon = other.GetComponent<ActiveWeapon>();
-                newActiveWeapon.DropWeapon();
-                newActiveWeapon.EquipWeapon(transform);
+                newActiveWeapon.DropWeapon(ActiveWeapon.WeaponAction.Pickup, (int)weaponSlot);
+                newActiveWeapon.EquipWeapon(this);
                 newActiveWeapon.SetupNewWeapon(weaponStats);
             }
         }
@@ -81,7 +82,7 @@ public class WeaponPickup : MonoBehaviour
 
     bool WeaponInPickupViewPort()
     {
-        if (viewPortPoint.z < 2.5f && Mathf.Abs(viewPortPoint.x - 0.5f) < 0.2f && Mathf.Abs(viewPortPoint.y - 0.5f) < 0.2f)
+        if (viewPortPoint.z < 3f && Mathf.Abs(viewPortPoint.x - 0.5f) < 0.15f && Mathf.Abs(viewPortPoint.y - 0.5f) < 0.15f)
         {
             return true;
         }

@@ -6,25 +6,37 @@ using UnityEditor.Animations;
 public class ActiveWeapon : MonoBehaviour
 {
     private static ActiveWeapon instance;
+    public enum WeaponSlot
+    {
+        Primary = 0,
+        Sidearm = 1,
+        Melee = 2
+    }
 
-    ShootController shootController;
-    WeaponPickup weaponPickup;
+    public enum WeaponAction
+    {
+        Throw = 0,
+        Pickup = 1,
+        Switch = 2,
+        View = 3
+    }
 
     public UnityEngine.Animations.Rigging.Rig handIk;
+    public WeaponPickup defaultWeapon;
+    public Transform[] weaponActivateSlots;
+    public WeaponPickup[] equippedWeapon = new WeaponPickup[3];
     public Transform weaponPivot;
-    public Transform currentWeapon;
-    public Transform parent;
     public Transform rightHandHolder, leftHandHolder;
     public Transform gunCamera;
     public float minDistanceToWeapon = 5, countWeponInArea = 0;
+    public int activeWeaponIndex = 3;
     public bool isHoldWeapon = false;
 
     [SerializeField]
     Animator rigController;
-    //[SerializeField]
-    //Animator animator;
-    //[SerializeField]
-    //AnimatorOverrideController animatorOverride;
+    Transform[] equippedWeaponParent = new Transform[3];
+
+    ShootController shootController;
 
     void MakeInstance()
     {
@@ -51,125 +63,160 @@ public class ActiveWeapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //animator = transform.GetChild(0).gameObject.GetComponent<Animator>();
-        //animatorOverride = animator.runtimeAnimatorController as AnimatorOverrideController;
-
         shootController = GetComponent<ShootController>();
+        EquipWeapon(defaultWeapon);
+        SetupNewWeapon(defaultWeapon.weaponStats);
 
-        foreach (Transform child in weaponPivot.transform)
-        {
-            if (child.gameObject.tag == "Weapon")
-            {
-                EquipWeapon(child.GetChild(0));
-                SetupNewWeapon(weaponPickup.weaponStats);
-                break;
-            }
-            else
-            {
-                //handIk.weight = 0.0f;
-                //animator.SetLayerWeight(1, 0.0f);
-            }
-        }
+        //foreach (Transform child in weaponPivot.transform)
+        //{
+        //    if (child.gameObject.tag == "Weapon")
+        //    {
+        //        EquipWeapon(child.GetChild(0).GetComponent<WeaponPickup>());
+        //        SetupNewWeapon(equippedWeapon[activeWeaponIndex].weaponStats);
+        //        break;
+        //    }
+        //}
     }
     
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G) && currentWeapon)
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            DropWeapon();
+            DropWeapon(WeaponAction.Throw, activeWeaponIndex);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SwitchWeapon(equippedWeapon[0]);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SwitchWeapon(equippedWeapon[1]);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SwitchWeapon(equippedWeapon[2]);
         }
     }
 
-    public void EquipWeapon(Transform newWeapon)
+    WeaponPickup GetWeapon(int index)
     {
-        //Set current weapon and its parent
-        currentWeapon = newWeapon;
-        parent = currentWeapon.parent;
-
-        SetupUtilities.SetLayers(parent, "Local Player", "Local Player", "Effect");
-
-        //Ref weaponpickup of wepon and disable UI
-        weaponPickup = currentWeapon.gameObject.GetComponent<WeaponPickup>();
-        if (weaponPickup.weaponUI) weaponPickup.weaponUI.gameObject.SetActive(false);
-
-        parent.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-
-        //Set parent for weapon and change noParent value
-        parent.parent = weaponPivot;
-        weaponPickup.noParent = false;
-
-        //Animation setup
-        isHoldWeapon = true;
-        SetWeaponAnimation();
-
-        //handIk.weight = 1.0f;
-        //animator.SetLayerWeight(1, 1.0f);
-
-        //Invoke(nameof(SetAnimationDelayded), 0.001f);
+        if (index < 0 || index > 2)
+        {
+            return null;
+        }
+        return equippedWeapon[index];
     }
 
-    public void DropWeapon()
+    public void EquipWeapon(WeaponPickup newWeapon)
     {
-        if (!isHoldWeapon) return;
+        int weaponSlotIndex = (int)newWeapon.weaponSlot;
+        isHoldWeapon = true;
+        bool isExistWeaponSlot = GetWeapon(weaponSlotIndex);
+
+        //Set current weapon and its parent
+        equippedWeapon[weaponSlotIndex] = newWeapon;
+        equippedWeaponParent[weaponSlotIndex] = equippedWeapon[weaponSlotIndex].transform.parent;
+
+        //Ref weaponpickup of wepon and disable UI
+        if (newWeapon.weaponUI) newWeapon.weaponUI.gameObject.SetActive(false);
+
+        SetupUtilities.SetLayers(equippedWeaponParent[weaponSlotIndex], "Local Player", "Local Player", "Effect");
+
+        equippedWeaponParent[weaponSlotIndex].gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+        //Set parent for weapon, change noParent value and run animation
+        newWeapon.noParent = false;
+
+        if (activeWeaponIndex > 1 || !isHoldWeapon || isExistWeaponSlot)
+        {
+            activeWeaponIndex = weaponSlotIndex;
+            equippedWeaponParent[weaponSlotIndex].parent = weaponPivot;
+            SetWeaponAnimation();
+            equippedWeaponParent[weaponSlotIndex].parent = weaponActivateSlots[weaponSlotIndex];
+            return;
+        }
+
+        equippedWeaponParent[weaponSlotIndex].parent = weaponActivateSlots[weaponSlotIndex];
+    }
+
+    public void DropWeapon(WeaponAction action, int weaponSlotIndex)
+    {
+        if (!isHoldWeapon || !equippedWeapon[weaponSlotIndex]) return;
+        if (action == WeaponAction.Switch)
+        {
+            rigController.speed = -1;
+            rigController.Play("Base Layer.Equip " + equippedWeapon[activeWeaponIndex].weaponStats.name, 0, 0f);
+            rigController.speed = 1;
+            return;
+        }
+        if (action == WeaponAction.Throw) rigController.Play("Base Layer.UnArmed", 0, 0f);
 
         //Set parent for weapon and change noParent value
-        parent.parent = null;
-        weaponPickup.noParent = true;
+        equippedWeaponParent[weaponSlotIndex].parent = null;
+        equippedWeapon[weaponSlotIndex].noParent = true;
 
-        SetupUtilities.SetLayers(parent, "Ignore Player", "Only Player", null);
+        SetupUtilities.SetLayers(equippedWeaponParent[weaponSlotIndex], "Ignore Player", "Only Player", null);
 
-        parent.localEulerAngles = Vector3.zero;
-        parent.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        //parent.localEulerAngles = Vector3.zero;
+        equippedWeaponParent[weaponSlotIndex].gameObject.GetComponent<Rigidbody>().isKinematic = false;
         //parent.gameObject.GetComponent<Rigidbody>().AddForce(currentWeapon.forward, ForceMode.Impulse);
 
         //Animation setup
         isHoldWeapon = false;
-        //animatorOverride["Weapon Animation Empty"] = null;
-        //handIk.weight = 0.0f;
-        //animator.SetLayerWeight(1, 0.0f);
 
-        if (!weaponPickup.weaponUI)
+        if (!equippedWeapon[weaponSlotIndex].weaponUI)
         {
-            weaponPickup.CreateWeaponUI();
+            equippedWeapon[weaponSlotIndex].CreateWeaponUI();
         }
 
         //Set current weapon, weapon pickup and its parent
-        currentWeapon = null;
-        parent = null;
-        weaponPickup = null;
+        //equippedWeapon[activeWeaponIndex] = null;
+        //parent = null;
+        equippedWeapon[weaponSlotIndex] = null;
     }
 
     public void SetupNewWeapon(WeaponStats weaponStats)
     {
         shootController.fireRate = weaponStats.fireRate;
-        shootController.raycastWeapon = currentWeapon.GetComponent<RaycastWeapon>();
+        shootController.raycastWeapon = equippedWeapon[activeWeaponIndex].GetComponent<RaycastWeapon>();
+    }
+
+    void SwitchWeapon(WeaponPickup activateWeapon)
+    {
+        if (activateWeapon)
+        {
+            if (activeWeaponIndex == (int)activateWeapon.weaponSlot) return;
+        }
+        else return;
+        DropWeapon(ActiveWeapon.WeaponAction.Switch, (int)equippedWeapon[activeWeaponIndex].weaponSlot);
+        EquipWeapon(activateWeapon);
+        SetupNewWeapon(activateWeapon.weaponStats);
     }
 
     void SetWeaponAnimation()
     {
         rigController.Rebind();
-        rigController.Play("Base Layer.Equip " + weaponPickup.weaponStats.name, 0, 0f);
+        rigController.Play("Base Layer.Equip " + equippedWeapon[activeWeaponIndex].weaponStats.name, 0, 0f);
     }
 
     void SetAnimationDelayded()
     {
-        //Debug.Log("Equip ");
-        //rigController.Play("Equip " + weaponPickup.weaponStats.name);
-        //animatorOverride["Weapon Animation Empty"] = currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation;
+
     }
 
     [ContextMenu("Save Weapon Pose")]
     void SaveWeaponPose()
     {
         GameObjectRecorder recorder = new GameObjectRecorder(transform.GetChild(0).gameObject);
-        //GameObjectRecorder recorder = new GameObjectRecorder(rigController.gameObject);
         recorder.BindComponentsOfType<Transform>(weaponPivot.gameObject, false);
-        recorder.BindComponentsOfType<Transform>(parent.gameObject, false);
+        recorder.BindComponentsOfType<Transform>(equippedWeaponParent[activeWeaponIndex].gameObject, false);
         recorder.BindComponentsOfType<Transform>(gunCamera.gameObject, false);
         recorder.BindComponentsOfType<Transform>(leftHandHolder.gameObject, false);
         recorder.BindComponentsOfType<Transform>(rightHandHolder.gameObject, false);
         recorder.TakeSnapshot(0.0f);
-        recorder.SaveToClip(currentWeapon.GetComponent<RaycastWeapon>().weaponAnimation);
+        recorder.SaveToClip(equippedWeapon[activeWeaponIndex].GetComponent<RaycastWeapon>().weaponAnimation);
     }
 }
