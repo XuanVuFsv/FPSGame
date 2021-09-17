@@ -25872,7 +25872,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1692350148
 Transform:
   m_ObjectHideFlags: 0
@@ -92503,14 +92503,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handIk: {fileID: 1194914079}
   defaultWeapon: {fileID: 2026935046}
-  weaponActivateSlots:
-  - {fileID: 1927466604}
-  - {fileID: 195689077}
-  - {fileID: 1966867212}
   equippedWeapon:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  weaponActivateSlots:
+  - {fileID: 1927466604}
+  - {fileID: 195689077}
+  - {fileID: 1966867212}
   weaponPivot: {fileID: 1919270673}
   rightHandHolder: {fileID: 1493794356}
   leftHandHolder: {fileID: 336328527}
@@ -92520,6 +92520,10 @@ MonoBehaviour:
   activeWeaponIndex: 3
   isHoldWeapon: 0
   rigController: {fileID: 6222273608098780395}
+  equippedWeaponParent:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &8916927845207098040
 GameObject:
   m_ObjectHideFlags: 0

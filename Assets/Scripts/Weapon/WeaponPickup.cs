@@ -61,7 +61,7 @@ public class WeaponPickup : MonoBehaviour
             {
                 ActiveWeapon newActiveWeapon = other.GetComponent<ActiveWeapon>();
                 newActiveWeapon.DropWeapon(ActiveWeapon.WeaponAction.Pickup, (int)weaponSlot);
-                newActiveWeapon.EquipWeapon(this);
+                newActiveWeapon.EquipWeapon(ActiveWeapon.WeaponAction.Pickup, this);
                 newActiveWeapon.SetupNewWeapon(weaponStats);
             }
         }
