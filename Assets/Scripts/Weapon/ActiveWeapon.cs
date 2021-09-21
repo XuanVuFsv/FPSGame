@@ -23,6 +23,7 @@ public class ActiveWeapon : MonoBehaviour
     }
 
     public UnityEngine.Animations.Rigging.Rig handIk;
+    public Cinemachine.CinemachineVirtualCamera playerCamera;
     public WeaponPickup defaultWeapon;
     public WeaponPickup[] equippedWeapon = new WeaponPickup[3];
     public Transform[] weaponActivateSlots;
@@ -141,6 +142,7 @@ public class ActiveWeapon : MonoBehaviour
         if (action == WeaponAction.Pickup)
         {
             //Set current weapon and its parent
+            newWeapon.GetComponent<WeaponRecoil>().playerCamera = playerCamera;
             equippedWeapon[weaponSlotIndex] = newWeapon;
             equippedWeaponParent[weaponSlotIndex] = equippedWeapon[weaponSlotIndex].transform.parent;
 
@@ -227,6 +229,7 @@ public class ActiveWeapon : MonoBehaviour
     public void SetupNewWeapon(WeaponStats weaponStats)
     {
         shootController.fireRate = weaponStats.fireRate;
+        shootController.autoReloadDelay = weaponStats.reloadSpeed;
         shootController.raycastWeapon = equippedWeapon[activeWeaponIndex].GetComponent<RaycastWeapon>();
     }
 

@@ -88,6 +88,7 @@
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\IgnoreUiRaycastWhenInactive.cs" />
     <Compile Include="Assets\Scripts\SyncTransform.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\EventSystemSpawner.cs" />
+    <Compile Include="Assets\Scripts\SaveWeaponAnimation.cs" />
     <Compile Include="Assets\Scripts\Camera\CinemachinePOVExtension.cs" />
     <Compile Include="Assets\Scripts\Player\JumpChecker.cs" />
     <Compile Include="Assets\Scripts\Stats\WeaponStats.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Assets\Scripts\Networking\MultiPlayerManager.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
     <Compile Include="Assets\AssetPackage\BigRookGames\_AssetPacks\Stylized Weapon Pack\M4 Scoped Assault Rifle\Scripts\GunfireController.cs" />
+    <Compile Include="Assets\Scripts\Weapon\WeaponRecoil.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\ChatGui.cs" />
     <Compile Include="Assets\_Temp_Low Poly FPS Pack - Free (Sample)\Components\Scripts\Misc\LookAtCamera.cs" />
     <Compile Include="Assets\_Temp_Low Poly FPS Pack - Free (Sample)\Components\Scripts\Weapon_Scripts\HandgunScriptLPFP.cs" />
@@ -108,7 +110,8 @@
     <Compile Include="Assets\Scripts\TransformFunctionality.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
     <Compile Include="Assets\Scripts\SetupUtilities.cs" />
-    <Compile Include="Assets\Scripts\SaveWeaponAnimation.cs" />
+    <Compile Include="Assets\Scripts\Manager\PoolingManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\BulletHoleBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Samples\Terrain Tools\0.1.0-preview\Terrain Assets\ThirdPartyNotices.txt" />

@@ -5,6 +5,7 @@ using UnityEngine;
 public class RaycastWeapon : MonoBehaviour
 {
     public GameObject bulletPrefab;
+    public WeaponRecoil recoil;
 
     public Transform raycastOrigin, raycastDestination;
     public Transform fpsCameraTransform;
@@ -33,6 +34,7 @@ public class RaycastWeapon : MonoBehaviour
 
     private void Start()
     {
+        recoil = GetComponent<WeaponRecoil>();
         weaponStats = GetComponent<WeaponPickup>().weaponStats;
         fpsCameraTransform = Camera.main.transform;
         initialSwayPosition = transform.localPosition;
@@ -45,6 +47,7 @@ public class RaycastWeapon : MonoBehaviour
     public void StartFiring()
     {
         muzzleFlash.Emit(1);
+        recoil.GenerateRecoil();
 
         //Spawn casing prefab at spawnpoint
         //Instantiate(weaponStats.casingPrefab,
@@ -63,6 +66,7 @@ public class RaycastWeapon : MonoBehaviour
             hitEffectPrefab.transform.forward = hit.normal;
             hitEffectPrefab.Emit(5);
 
+            PoolingManager.Instance.UseOneHItEffect(hit);
             //tracer.transform.position = hit.point;
             //Debug.Log(hit.point + " " + hit.transform.name);           
         }

@@ -20,7 +20,7 @@ MonoBehaviour:
   damageArmsLegs: 29
   dropOffDsitance: 20
   decreseDamageRate: 25
-  fireRate: 11
+  fireRate: 10
   runSpeed: 5.5
   reloadSpeed: 2.5
   magazine: 30

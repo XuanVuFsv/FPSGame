@@ -15,7 +15,6 @@ public class WeaponPickup : MonoBehaviour
 
     static int standardLengthWeponName = 4;
     static float offsetPerOverLetter = 0.5f;
-    
 
     private void Start()
     {
