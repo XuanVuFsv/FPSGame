@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class WeaponRecoil : MonoBehaviour
 {
-    //[HideInInspector]
     public Cinemachine.CinemachineVirtualCamera playerCamera;
-    public Cinemachine.CinemachinePOV playerAiming;
-    
-    //[HideInInspector]
+    public Cinemachine.CinemachinePOV playerAiming;  
     public Cinemachine.CinemachineImpulseSource cameraShake;
+    public Animator rigController;
+    public Vector2[] recoilPattern;
 
-    public float verticalRecoil;
     public float duration;
     public float yAxisValue;
 
+    float horizontalRecoil, verticalRecoil;
     float time;
+    public int index = 0;
 
     private void Awake()
     {
@@ -30,15 +30,39 @@ public class WeaponRecoil : MonoBehaviour
 
         if (time > 0)
         {
-            playerAiming.m_VerticalAxis.Value -= verticalRecoil;
+            playerAiming.m_HorizontalAxis.Value -= horizontalRecoil * Time.deltaTime / duration;
+            playerAiming.m_VerticalAxis.Value -= verticalRecoil * Time.deltaTime / duration;
             time -= Time.deltaTime;
         }
     }
 
-    public void GenerateRecoil()
+    int NextIndex()
+    {
+        return ((index + 1) % recoilPattern.Length);
+    }
+        
+    public void ResetRecoil()
+    {
+        index = 0;
+    }
+
+    public void GenerateRecoil(string weaponName)
     {
         time = duration;
 
         cameraShake.GenerateImpulse(Camera.main.transform.forward);
+
+        horizontalRecoil = recoilPattern[index].x;
+        verticalRecoil = recoilPattern[index].y;
+
+        index = NextIndex();
+
+        rigController.Play("RECOIL " + weaponName, 1, 0.0f);
+    }
+
+    public void SetUpWeaponRecoilForNewWeapon(Cinemachine.CinemachineVirtualCamera newCamera, Animator newRigController)
+    {
+        playerCamera = newCamera;
+        rigController = newRigController;
     }
 }

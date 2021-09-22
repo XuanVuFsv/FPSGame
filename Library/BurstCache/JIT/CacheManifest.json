@@ -122,6 +122,20 @@
         1,
         2
       ]
+    },
+    {
+      "FullName": "System.Void UnityEngine.Animations.ProcessAnimationJobStruct`1<UnityEngine.Animations.Rigging.OverrideTransformJob>::Execute(T&,System.IntPtr,System.IntPtr,Unity.Jobs.LowLevel.Unsafe.JobRanges&,System.Int32)",
+      "ModuleOptionsHash": 8794384452606821980,
+      "ModuleHash": "84b94927e223ef6ebfe3dbf74d3e7a4d",
+      "LinkName": "5A1B018114FFE984",
+      "AssemblyDependencyIndices": [
+        3,
+        4,
+        5,
+        6,
+        1,
+        2
+      ]
     }
   ]
 }

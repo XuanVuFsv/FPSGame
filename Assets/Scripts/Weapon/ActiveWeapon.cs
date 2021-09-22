@@ -142,7 +142,7 @@ public class ActiveWeapon : MonoBehaviour
         if (action == WeaponAction.Pickup)
         {
             //Set current weapon and its parent
-            newWeapon.GetComponent<WeaponRecoil>().playerCamera = playerCamera;
+            newWeapon.GetComponent<WeaponRecoil>().SetUpWeaponRecoilForNewWeapon(playerCamera, rigController);
             equippedWeapon[weaponSlotIndex] = newWeapon;
             equippedWeaponParent[weaponSlotIndex] = equippedWeapon[weaponSlotIndex].transform.parent;
 

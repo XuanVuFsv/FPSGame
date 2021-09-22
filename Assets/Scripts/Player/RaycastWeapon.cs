@@ -47,7 +47,7 @@ public class RaycastWeapon : MonoBehaviour
     public void StartFiring()
     {
         muzzleFlash.Emit(1);
-        recoil.GenerateRecoil();
+        recoil.GenerateRecoil(weaponStats.name);
 
         //Spawn casing prefab at spawnpoint
         //Instantiate(weaponStats.casingPrefab,
@@ -75,7 +75,7 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StopFiring()
     {
-        
+        recoil.ResetRecoil();
     }
 
     private void OnDrawGizmos()
