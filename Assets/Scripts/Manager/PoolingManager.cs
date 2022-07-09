@@ -69,9 +69,10 @@ public class PoolingManager : MonoBehaviour
         //hitEffectList[indexReadyToUse].transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(hit.normal));
         hitEffectList[indexReadyToUse].transform.position = hit.point;
         hitEffectList[indexReadyToUse].transform.rotation = Quaternion.LookRotation(hit.normal);
-        GameObject newCube = Instantiate(test);
-        newCube.transform.position = hit.point;
-        newCube.transform.rotation = Quaternion.LookRotation(hit.normal); indexReadyToUse++;
+        //GameObject newCube = Instantiate(test);
+        //newCube.transform.position = hit.point;
+        //newCube.transform.rotation = Quaternion.LookRotation(hit.normal);
+        indexReadyToUse++;
         indexAlwaysReady = indexReadyToUse;
         //Debug.Log("current index after use: " + indexReadyToUse + " " + indexAlwaysReady);
     }

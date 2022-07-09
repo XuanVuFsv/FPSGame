@@ -16,8 +16,8 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         //Set up cursor
-        //Cursor.visible = false;
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         Application.targetFrameRate = fps;
     }
 
@@ -43,8 +43,8 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.U))
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.visible = true;
+            //Cursor.lockState = CursorLockMode.None;
         }
     }
 }

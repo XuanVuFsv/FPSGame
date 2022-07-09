@@ -10,14 +10,14 @@ public class MainCharacterAnimator : MonoBehaviour
 
     [SerializeField]
     private MovementController movementController;
-    [SerializeField]
-    private float timeToChangeIdlePose = 60; //ms
-    [SerializeField]
-    private float timeOfPreLanding;
-    [SerializeField]
-    private bool inLongIdle = false;
-    [SerializeField]
-    private bool isEndChangeAnimationIdleCoroutine = true;
+    //[SerializeField]
+    //private float timeToChangeIdlePose = 60; //ms
+    //[SerializeField]
+    //private float timeOfPreLanding;
+    //[SerializeField]
+    //private bool inLongIdle = false;
+    //[SerializeField]
+    //private bool isEndChangeAnimationIdleCoroutine = true;
 
     [SerializeField]
     private bool endFireSession = true;
@@ -30,12 +30,12 @@ public class MainCharacterAnimator : MonoBehaviour
 
     private InputController inputController;
     private ShootController shootController;
-    private AnimatorStateInfo state;
-    private IEnumerator changeIdleAnimationCorroutine;
-    private bool inTransition, inIdle, inWalk, inJump;
+    //private AnimatorStateInfo state;
+    //private IEnumerator changeIdleAnimationCorroutine;
+    //private bool inTransition, inIdle, inWalk, inJump;
 
-    delegate void ControlIdleAnimationCoroutine(IEnumerator corountine);
-    private ControlIdleAnimationCoroutine startCoroutine = null;
+    //delegate void ControlIdleAnimationCoroutine(IEnumerator corountine);
+    //private ControlIdleAnimationCoroutine startCoroutine = null;
 
     #region Test
     //public int countParameters, countParametersAnimator;
@@ -82,7 +82,7 @@ public class MainCharacterAnimator : MonoBehaviour
     void UpdateAnimatorParameters()
     {
         #region Basic Animation Properties
-        state = animator.GetCurrentAnimatorStateInfo(0);
+        //state = animator.GetCurrentAnimatorStateInfo(0);
 
         //Change aim animator parameter when right mouse down
         if (inputController.isAim)
@@ -119,7 +119,7 @@ public class MainCharacterAnimator : MonoBehaviour
                     currentFireAnimation = "single";
 
                     //weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
-                    animator.SetBool("isFire", true && shootController.isFire);
+                    animator.SetBool("isFire", shootController.isFire);
                     animator.SetFloat("fireValue", 0);
                     animator.SetFloat("fireRate", 1);
 
@@ -134,7 +134,7 @@ public class MainCharacterAnimator : MonoBehaviour
                     currentFireAnimation = "auto";
 
                     //weaponAnimators[0].SetBool("isFire", true && shootController.isFire);
-                    animator.SetBool("isFire", true && shootController.isFire);
+                    animator.SetBool("isFire", shootController.isFire);
                     animator.SetFloat("fireValue", 1);
                     animator.SetFloat("fireRate", shootController.fireRate / 50);
                 }
@@ -147,20 +147,7 @@ public class MainCharacterAnimator : MonoBehaviour
                 //weaponAnimators[0].SetBool("isFire", false);
                 endFireAnimation = true;
             }
-
-            if (!Input.anyKey && !Input.anyKeyDown && !inLongIdle && isEndChangeAnimationIdleCoroutine)
-            {
-                startCoroutine += StartChangeIdleAnimationCorroutine;
-                startCoroutine(ChangeIdleAnimation());
-            }
-            else if (Input.anyKeyDown || Input.anyKey)
-            {
-                startCoroutine = null;
-                inLongIdle = false;
-                animator.SetBool("isIdle2", false);
-            }
         }
-
         #endregion
 
         #region Update Animator Value
@@ -182,23 +169,6 @@ public class MainCharacterAnimator : MonoBehaviour
         //    }
         //}
         #endregion
-    }
-
-    public IEnumerator ChangeIdleAnimation()
-    {
-        isEndChangeAnimationIdleCoroutine = false;
-        inLongIdle = true;
-        yield return new WaitForSeconds(timeToChangeIdlePose);
-        if (!Input.anyKey && !Input.anyKeyDown && startCoroutine != null)
-        {
-            animator.SetBool("isIdle2", true);
-        }
-        isEndChangeAnimationIdleCoroutine = true;
-    }
-
-    void StartChangeIdleAnimationCorroutine(IEnumerator coroutine)
-    {
-        StartCoroutine(coroutine);
     }
 
     public IEnumerator ApllyFireRateAnimation()

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class RaycastWeapon : MonoBehaviour
 {
-    public GameObject bulletPrefab;
+    public GameObject bulletPrefab, magazine;
     public WeaponRecoil recoil;
 
-    public Transform raycastOrigin, raycastDestination;
+    public Transform raycastOrigin;
+    //public Transform raycastDestination;
+
     public Transform fpsCameraTransform;
 
     public Transform bulletSpawnPoint, casingSpawnPoint;
@@ -23,7 +25,7 @@ public class RaycastWeapon : MonoBehaviour
     RaycastHit hit;
     int layerMask;
 
-    [Header("Weapon Sway")]
+    [Header("Weapon Sway (not used)")]
     //Enables weapon sway
     public bool weaponSway;
     public float swayAmount = 0.02f;
@@ -37,7 +39,7 @@ public class RaycastWeapon : MonoBehaviour
         recoil = GetComponent<WeaponRecoil>();
         weaponStats = GetComponent<WeaponPickup>().weaponStats;
         fpsCameraTransform = Camera.main.transform;
-        initialSwayPosition = transform.localPosition;
+        //initialSwayPosition = transform.localPosition;
         layerMask = ~((1 << LayerMask.NameToLayer("Ignore Raycast")) << LayerMask.NameToLayer("Only Player"));
 
         hitEffectPrefab = Instantiate(weaponStats.hitEffectPrefab, transform);
@@ -68,7 +70,11 @@ public class RaycastWeapon : MonoBehaviour
 
             PoolingManager.Instance.UseOneHItEffect(hit);
             //tracer.transform.position = hit.point;
-            //Debug.Log(hit.point + " " + hit.transform.name);           
+            if (hit.transform.gameObject.tag == "Wall")
+            {
+                GameObject wall = hit.transform.gameObject;
+                WallSpawner.Instance.DestroyWall(wall.GetComponent<WallBehaviour>().index, hit);
+            }
         }
         //else tracer.transform.position += fpsCameraTransform.forward * range;
     }

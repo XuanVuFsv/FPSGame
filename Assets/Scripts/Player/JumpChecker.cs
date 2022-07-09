@@ -30,41 +30,41 @@ public class JumpChecker : MonoBehaviour
         //CheckOnGrounded();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!movementController.onGround && !(other.name == footColliderName))
-        {
-            movementController.onGround = true;
-            movementController.onAir = false;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (!(other.name == footColliderName))
-        {
-            movementController.onGround = false;
-            movementController.onAir = true;    
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (!movementController.onGround && !(other.name == footColliderName))
+    //    {
+    //        movementController.onGround = true;
+    //        movementController.onAir = false;
+    //    }
+    //}
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (!(other.name == footColliderName))
+    //    {
+    //        movementController.onGround = false;
+    //        movementController.onAir = true;    
+    //    }
+    //}
 
-    #region CheckOnGround
-    void CheckOnGround()
-    {
-        if (Physics.Raycast(transform.position, -Vector3.up * distanceOfJumChecker, out hit, distanceOfJumChecker))
-        {
-            StartCoroutine(CheckPreLanding());
-        }
-    }
+    //#region CheckOnGround
+    //void CheckOnGround()
+    //{
+    //    if (Physics.Raycast(transform.position, -Vector3.up * distanceOfJumChecker, out hit, distanceOfJumChecker))
+    //    {
+    //        StartCoroutine(CheckPreLanding());
+    //    }
+    //}
 
-    IEnumerator CheckPreLanding()
-    {
-        yield return new WaitForSeconds(timeOfPreLanding);
-        if (Physics.Raycast(transform.position, -Vector3.up * distanceOfJumChecker, out hit, distanceOfJumChecker))
-        {
-            movementController.onGround = true;
-            Debug.Log(hit.collider.name);
-            movementController.onAir = false;
-        }
-    }
-    #endregion
+    //IEnumerator CheckPreLanding()
+    //{
+    //    yield return new WaitForSeconds(timeOfPreLanding);
+    //    if (Physics.Raycast(transform.position, -Vector3.up * distanceOfJumChecker, out hit, distanceOfJumChecker))
+    //    {
+    //        movementController.onGround = true;
+    //        Debug.Log(hit.collider.name);
+    //        movementController.onAir = false;
+    //    }
+    //}
+    //#endregion
 }

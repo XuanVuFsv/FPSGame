@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 
 public class ActiveWeapon : MonoBehaviour
 {
@@ -231,6 +231,7 @@ public class ActiveWeapon : MonoBehaviour
         shootController.fireRate = weaponStats.fireRate;
         shootController.autoReloadDelay = weaponStats.reloadSpeed;
         shootController.raycastWeapon = equippedWeapon[activeWeaponIndex].GetComponent<RaycastWeapon>();
+        shootController.magazine = equippedWeapon[activeWeaponIndex].GetComponent<RaycastWeapon>().magazine;
     }
 
     void SetWeaponAnimation()
@@ -244,16 +245,16 @@ public class ActiveWeapon : MonoBehaviour
 
     }
 
-    [ContextMenu("Save Weapon Pose")]
-    void SaveWeaponPose()
-    {
-        GameObjectRecorder recorder = new GameObjectRecorder(transform.GetChild(0).gameObject);
-        recorder.BindComponentsOfType<Transform>(weaponPivot.gameObject, false);
-        recorder.BindComponentsOfType<Transform>(equippedWeaponParent[activeWeaponIndex].gameObject, false);
-        recorder.BindComponentsOfType<Transform>(gunCamera.gameObject, false);
-        recorder.BindComponentsOfType<Transform>(leftHandHolder.gameObject, false);
-        recorder.BindComponentsOfType<Transform>(rightHandHolder.gameObject, false);
-        recorder.TakeSnapshot(0.0f);
-        recorder.SaveToClip(equippedWeapon[activeWeaponIndex].GetComponent<RaycastWeapon>().weaponAnimation);
-    }
+    //[ContextMenu("Save Weapon Pose")]
+    //void SaveWeaponPose()
+    //{
+    //    GameObjectRecorder recorder = new GameObjectRecorder(transform.GetChild(0).gameObject);
+    //    recorder.BindComponentsOfType<Transform>(weaponPivot.gameObject, false);
+    //    recorder.BindComponentsOfType<Transform>(equippedWeaponParent[activeWeaponIndex].gameObject, false);
+    //    recorder.BindComponentsOfType<Transform>(gunCamera.gameObject, false);
+    //    recorder.BindComponentsOfType<Transform>(leftHandHolder.gameObject, false);
+    //    recorder.BindComponentsOfType<Transform>(rightHandHolder.gameObject, false);
+    //    recorder.TakeSnapshot(0.0f);
+    //    recorder.SaveToClip(equippedWeapon[activeWeaponIndex].GetComponent<RaycastWeapon>().weaponAnimation);
+    //}
 }

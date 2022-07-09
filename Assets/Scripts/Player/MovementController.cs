@@ -4,49 +4,37 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    public List<PhysicMaterial> physicMaterials;
-    public Vector3 nextPosition;
-    public Quaternion nextRotation;
+    //public List<PhysicMaterial> physicMaterials;
     public LayerMask groundCheckLayers = -1;
-    public float moveSpeed, walkSpeed, onAimOrFireSpeed, jumpForce;
-    public float jumpGroundingPreventionTime;
+    public float runSpeed, walkSpeed, onAimOrFireSpeed, jumpForce;
+    public float jumpDelay;
     public float groundCheckDistance = 0.05f;
     public float skinWidth = 0.02f;
     public float slopeLimit;
     public float currentSlope;
-    public bool onGround, onAir;
+    //public bool onGround, onAir;
     public bool readyToJump = true, allowJump = true;
     public bool isGrounded;
-    public bool HasJumpedThisFrame { get; private set; }
 
-    [SerializeField]
+    //[SerializeField]
     private Transform followTargetTransform;
     [SerializeField]
     private new Rigidbody rigidbody;
     [SerializeField]
     private Vector3 movementVector;
-    [SerializeField]
-    private Vector3 turnSpeed;
-    [SerializeField]
-    private Vector2 limitAngleY; // properties: x is min value y is max value
-    [SerializeField]
-    private float rotationLerp = 0.5f;
-    [SerializeField]
-    private float m_LastTimeJumped = 0;
-    [SerializeField]
-    private string collisonCollider;
+    //[SerializeField]
+    //private string collisonCollider;
 
     private InputController inputController;
     private CapsuleCollider capsuleCollider;
     private MainCharacterAnimator mainCharacterAnimator;
-    private CameraController cameraController;
     private Vector3 m_GroundNormal;
 
-    const float k_GroundCheckDistanceInAir = 0.07f;
+    public float k_GroundCheckDistanceInAir = 0.07f;
 
     #region Test
-    public GameObject cubeRigidbody;
-    public int forceTest;
+    //public GameObject cubeRigidbody;
+    //public int forceTest;
     #endregion
 
     // Start is called before the first frame update
@@ -56,8 +44,7 @@ public class MovementController : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider>();
         inputController = GetComponent<InputController>();
         mainCharacterAnimator = GetComponent<MainCharacterAnimator>();
-        cameraController = GetComponent<CameraController>();
-        capsuleCollider.material = physicMaterials[0];
+        //capsuleCollider.material = physicMaterials[0];
     }
 
     private void Update()
@@ -109,20 +96,20 @@ public class MovementController : MonoBehaviour
 
     void Move()
     {
-        movementVector = (transform.forward * inputController.vertical + transform.right * inputController.horizontal).normalized;
+        movementVector = (transform.forward * inputController.rawVertical + transform.right * inputController.rawHorizontal).normalized;
 
-        if ((inputController.vertical > 0) && !inputController.isAim)
+        if ((inputController.rawVertical > 0) && !inputController.isAim)
         {
             //rigidbody.MovePosition(rigidbody.position + movementVector * speedMove * Time.deltaTime);
-            moveSpeed = walkSpeed;
+            runSpeed = walkSpeed;
         }
         else
         {
             //rigidbody.MovePosition(rigidbody.position + movementVector * speedMove * 0.5f * Time.deltaTime);
-            moveSpeed = onAimOrFireSpeed;
+            runSpeed = onAimOrFireSpeed;
         }
 
-        rigidbody.MovePosition(rigidbody.position + movementVector * moveSpeed * Time.deltaTime);
+        rigidbody.MovePosition(rigidbody.position + movementVector * runSpeed * Time.deltaTime);
     }
 
     void GroundCheck()
@@ -189,12 +176,12 @@ public class MovementController : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(GetCapsuleBottomHemisphere(), capsuleCollider.radius);
-        Gizmos.DrawWireSphere(GetCapsuleTopHemisphere(capsuleCollider.height), capsuleCollider.radius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(GetCapsuleBottomHemisphere(), capsuleCollider.radius);
+    //    Gizmos.DrawWireSphere(GetCapsuleTopHemisphere(capsuleCollider.height), capsuleCollider.radius);
+    //}
 
     // Returns true if the slope angle represented by the given normal is under the slope angle limit of the character controller
     bool IsNormalUnderSlopeLimit(Vector3 normal)
@@ -219,36 +206,36 @@ public class MovementController : MonoBehaviour
     {
         readyToJump = false;
         mainCharacterAnimator.SetJumpAnimationParameter(isGrounded, true, jumpProcessValue, 0.5f);
-        StartCoroutine(PreventJump());
+        StartCoroutine(DelayJump());
         yield return new WaitForSeconds((18 / 31) * (16 / 3)); //play a part of animation before jump t = 8/15 * 0.533 8/15 frame length = 0.533s
         rigidbody.AddForce(transform.up * jumpForce);
     }
 
-    IEnumerator PreventJump()
+    IEnumerator DelayJump()
     {
-        yield return new WaitForSeconds(jumpGroundingPreventionTime);
+        yield return new WaitForSeconds(jumpDelay);
         readyToJump = true;
     }
 
-    public void UpdateCapsuleCollider(bool isJump)
-    {
-        if (isJump)
-        {
-            onGround = false;
-            onAir = true;
-            return;
-        }
-        onGround = true;
-        onAir = false;
-    }
+    //public void UpdateCapsuleCollider(bool isJump)
+    //{
+    //    if (isJump)
+    //    {
+    //        onGround = false;
+    //        onAir = true;
+    //        return;
+    //    }
+    //    onGround = true;
+    //    onAir = false;
+    //}
 
-    private void OnCollisionStay(Collision collision)
-    {
-        collisonCollider = collision.collider.name;
-    }
+    //private void OnCollisionStay(Collision collision)
+    //{
+    //    collisonCollider = collision.collider.name;
+    //}
 
-    private void OnCollisionExit(Collision collision)
-    {
-        collisonCollider = "exit";
-    }
+    //private void OnCollisionExit(Collision collision)
+    //{
+    //    collisonCollider = "exit";
+    //}
 }

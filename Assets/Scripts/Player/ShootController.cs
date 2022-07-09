@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class ShootController : MonoBehaviour
 {
+    [Header("Shooting")]
     public RaycastWeapon raycastWeapon;
     public bool isFire;
 
-    //Used for fire rate
-    private float lastFired;
+    private InputController inputController;
+
+    [Header("Reload")]
+    public Animator rigController;
+    public WeaponAnimationEvents animationEvents;
+    public GameObject leftHand, magazine, magazineHand;
 
     [Header("Weapon Settings")]
     //[Tooltip("How fast the weapon fires, higher value means faster rate of fire.")]
@@ -19,10 +24,11 @@ public class ShootController : MonoBehaviour
     public int ammo;
     public bool autoReload;
 
+    //Used for fire rate
+    private float lastFired;
     private bool isReloading;
     //How much ammo is currently left
-    [SerializeField]
-    private int currentAmmo;
+    public int currentAmmo, shootingTime = 0;
     //Check if out of ammo
     private bool outOfAmmo;
 
@@ -44,12 +50,11 @@ public class ShootController : MonoBehaviour
     public Light muzzleflashLight;
     public float lightDuration = 0.02f;
 
-    private InputController inputController;
-
     // Start is called before the first frame update
 
     void Start()
     {
+        animationEvents.weaponAnimationEvent.AddListener(OnAnimationEvent);
         inputController = InputController.Instance;
 
         //Weapon sway
@@ -61,7 +66,7 @@ public class ShootController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ActiveWeapon.Instance.isHoldWeapon) //only when test pickup weapon system
+        //if (ActiveWeapon.Instance.isHoldWeapon && (int)GamePlayManager.Instance.state == 2) //only when test pickup weapon system
         {
             //If out of ammo
             if (currentAmmo == 0)
@@ -90,6 +95,7 @@ public class ShootController : MonoBehaviour
 
                     //Remove 1 bullet from ammo
                     currentAmmo -= 1;
+                    shootingTime++;
 
                     //Control muzzle flash
                     if (!inputController.isAim) //if not aiming
@@ -122,11 +128,53 @@ public class ShootController : MonoBehaviour
     //Reload
     IEnumerator Reload()
     {
+        rigController.SetTrigger("ReloadAK");
         isReloading = true;
         yield return new WaitForSeconds(autoReloadDelay);
         //Restore ammo when reloading
         currentAmmo = ammo;
         outOfAmmo = false;
         isReloading = false;
+    }
+
+    void OnAnimationEvent(string eventName)
+    {
+        switch (eventName)  
+        {
+            case "detach_magazine":
+                DeTachMagazine();
+                break;
+            case "drop_magazine":
+                DropMagazine();
+                break;
+            case "refill_magazine":
+                RefillMagazine();
+                break;
+            case "attach_magazine":
+                AttachMagazine();
+                break;
+        }    
+    }
+
+    void DeTachMagazine()
+    {
+        magazineHand = Instantiate(magazine, leftHand.transform, true);
+        magazine.SetActive(false);
+    }
+
+    void DropMagazine()
+    {
+            
+    }
+
+    void RefillMagazine()
+    {
+
+    }
+
+    void AttachMagazine()
+    {
+        magazine.SetActive(true);
+        Destroy(magazineHand);
     }
 }

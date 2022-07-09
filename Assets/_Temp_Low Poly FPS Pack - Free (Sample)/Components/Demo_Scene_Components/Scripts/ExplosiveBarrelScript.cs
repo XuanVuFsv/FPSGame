@@ -80,17 +80,11 @@ public class ExplosiveBarrelScript : MonoBehaviour {
 
 		//Raycast downwards to check the ground tag
 		RaycastHit checkGround;
-		//Debug.Log(transform.position);
 		if (Physics.Raycast(transform.position, Vector3.down, out checkGround, 50))
 		{
-			//Debug.Log(checkGround.point);
 			//Instantiate explosion prefab at hit position
-			Instantiate(explosionPrefab, checkGround.point, 
-				Quaternion.FromToRotation (Vector3.forward, checkGround.normal));
-			//Debug.Log(checkGround.normal);
-			//Debug.Log(Quaternion.FromToRotation(Vector3.forward, checkGround.normal).ToEuler());
-			//Debug.Log(Quaternion.FromToRotation(Vector3.forward, checkGround.normal));
-			//Debug.Log(Quaternion.FromToRotation(Vector3.forward, checkGround.normal).eulerAngles);
+			Instantiate (explosionPrefab, checkGround.point, 
+				Quaternion.FromToRotation (Vector3.forward, checkGround.normal)); 
 		}
 
 		//Destroy the current barrel object

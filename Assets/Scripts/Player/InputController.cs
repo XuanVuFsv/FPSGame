@@ -19,6 +19,7 @@ public class InputController : MonoBehaviour
     public bool isBrake;
 
     public float horizontal, vertical;
+    public float rawHorizontal, rawVertical;
     public float mouseX, mouseY;
     public float fireValue = 0;
 
@@ -55,6 +56,8 @@ public class InputController : MonoBehaviour
     {
         move.x = horizontal = Input.GetAxis("Horizontal");
         move.y = vertical = Input.GetAxis("Vertical");
+        rawHorizontal = Input.GetAxisRaw("Horizontal");
+        rawVertical = Input.GetAxisRaw("Vertical");
         look.x = mouseX = Input.GetAxis("Mouse X");
         look.y = mouseY = Input.GetAxis("Mouse Y");
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace FPSControllerLPFP
 {
@@ -65,10 +64,9 @@ namespace FPSControllerLPFP
         private SmoothRotation _rotationY;
         private SmoothVelocity _velocityX;
         private SmoothVelocity _velocityZ;
-        public bool _isGrounded;
+        private bool _isGrounded;
 
         private readonly RaycastHit[] _groundCastResults = new RaycastHit[8];
-        public List<GameObject> hits = new List<GameObject>(8);
         private readonly RaycastHit[] _wallCastResults = new RaycastHit[8];
 
         /// Initializes the FpsController on start.
@@ -124,24 +122,16 @@ namespace FPSControllerLPFP
             var extents = bounds.extents;
             var radius = extents.x - 0.01f;
             Physics.SphereCastNonAlloc(bounds.center, radius, Vector3.down,
-                _groundCastResults, extents.y + radius * 0.5f, ~0, QueryTriggerInteraction.Ignore);
+                _groundCastResults, extents.y - radius * 0.5f, ~0, QueryTriggerInteraction.Ignore);
             if (!_groundCastResults.Any(hit => hit.collider != null && hit.collider != _collider)) return;
-            hits.Clear();
             for (var i = 0; i < _groundCastResults.Length; i++)
             {
-                if (_groundCastResults[i].collider != null) hits.Add(_groundCastResults[i].collider.transform.gameObject);
                 _groundCastResults[i] = new RaycastHit();
             }
 
             _isGrounded = true;
         }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(_collider.bounds.center, _collider.bounds.extents.x - 0.01f);
-        }
-
+			
         /// Processes the character movement and the camera rotation every fixed framerate frame.
         private void FixedUpdate()
         {
@@ -150,7 +140,7 @@ namespace FPSControllerLPFP
             MoveCharacter();
             _isGrounded = false;
         }
-
+			
         /// Moves the camera to the character, processes jumping and plays sounds every frame.
         private void Update()
         {
@@ -165,9 +155,8 @@ namespace FPSControllerLPFP
             var rotationY = _rotationY.Update(RotationYRaw, rotationSmoothness);
             var clampedY = RestrictVerticalRotation(rotationY);
             _rotationY.Current = clampedY;
-
 			var worldUp = arms.InverseTransformDirection(Vector3.up);
-            var rotation = arms.rotation *
+			var rotation = arms.rotation *
                            Quaternion.AngleAxis(rotationX, worldUp) *
                            Quaternion.AngleAxis(clampedY, Vector3.left);
             transform.eulerAngles = new Vector3(0f, rotation.eulerAngles.y, 0f);

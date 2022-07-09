@@ -8,6 +8,8 @@ TagManager:
   - Weapon
   - Effect
   - DevEnv
+  - Metal
+  - Wall
   layers:
   - Default
   - TransparentFX

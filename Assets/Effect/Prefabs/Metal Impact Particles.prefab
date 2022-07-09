@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3065922240909306208}
   - component: {fileID: 2908678513265010918}
   - component: {fileID: 2907567815756412804}
+  - component: {fileID: 1725869775512681364}
   m_Layer: 0
   m_Name: Metal Impact Particles
   m_TagString: Effect
@@ -4816,3 +4817,17 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &1725869775512681364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3069349202201149058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5b400bcde74b14898a6fca1a7f0c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 3
+  index: 0
