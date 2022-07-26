@@ -24,7 +24,7 @@ public class ActiveWeapon : MonoBehaviour
 
     public UnityEngine.Animations.Rigging.Rig handIk;
     public Cinemachine.CinemachineVirtualCamera playerCamera;
-    public WeaponPickup defaultWeapon;
+    public WeaponPickup defaultWeapon1, defaultWeapon2;
     public WeaponPickup[] equippedWeapon = new WeaponPickup[3];
     public Transform[] weaponActivateSlots;
     public Transform weaponPivot;
@@ -67,8 +67,11 @@ public class ActiveWeapon : MonoBehaviour
     void Start()
     {
         shootController = GetComponent<ShootController>();
-        EquipWeapon(WeaponAction.Pickup, defaultWeapon);
-        SetupNewWeapon(defaultWeapon.weaponStats);
+        EquipWeapon(WeaponAction.Pickup, defaultWeapon1);
+        SetupNewWeapon(defaultWeapon1.weaponStats);
+        AttachWeapon(defaultWeapon2, weaponActivateSlots[2], 2);
+        //EquipWeapon(WeaponAction.Pickup, defaultWeapon2);
+        //SetupNewWeapon(defaultWeapon2.weaponStats);
 
         {
             //foreach (Transform child in weaponPivot.transform)
@@ -86,6 +89,8 @@ public class ActiveWeapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        rigController.SetBool("isHoldWeapon", isHoldWeapon);
+
         if (Input.GetKeyDown(KeyCode.G))
         {
             DropWeapon(WeaponAction.Throw, activeWeaponIndex);
@@ -123,7 +128,7 @@ public class ActiveWeapon : MonoBehaviour
             if (activeWeaponIndex == (int)activateWeapon.weaponSlot) return;
         }
         else return;
-        DropWeapon(ActiveWeapon.WeaponAction.Switch, (int)equippedWeapon[activeWeaponIndex].weaponSlot);
+        if (isHoldWeapon) DropWeapon(ActiveWeapon.WeaponAction.Switch, (int)equippedWeapon[activeWeaponIndex].weaponSlot);
         EquipWeapon(WeaponAction.Switch, activateWeapon);
         SetupNewWeapon(activateWeapon.weaponStats);
     }
@@ -142,6 +147,7 @@ public class ActiveWeapon : MonoBehaviour
         if (action == WeaponAction.Pickup)
         {
             //Set current weapon and its parent
+            //Debug.Log(rigController.name + " " + newWeapon.name);
             newWeapon.GetComponent<WeaponRecoil>().SetUpWeaponRecoilForNewWeapon(playerCamera, rigController);
             equippedWeapon[weaponSlotIndex] = newWeapon;
             equippedWeaponParent[weaponSlotIndex] = equippedWeapon[weaponSlotIndex].transform.parent;
@@ -176,10 +182,9 @@ public class ActiveWeapon : MonoBehaviour
     public void DropWeapon(WeaponAction action, int weaponSlotIndex)
     {
         //Don't run this function when don't hold any weapon or throw a null weapon
-        //if (!isHoldWeapon) return;
         if (!equippedWeapon[weaponSlotIndex])
         {
-            if (activeWeaponIndex == 2) equippedWeaponParent[activeWeaponIndex].gameObject.SetActive(false);
+            Debug.Log("Don't have weapon index: " + weaponSlotIndex);
             return;
         }
         else
@@ -195,6 +200,9 @@ public class ActiveWeapon : MonoBehaviour
             }
             //Throw or Pickup
             //Set parent for weapon and change noParent value, layers
+
+            //rigController.enabled = false;
+
             equippedWeaponParent[weaponSlotIndex].parent = null;
             equippedWeapon[weaponSlotIndex].noParent = true;
 
@@ -213,17 +221,39 @@ public class ActiveWeapon : MonoBehaviour
             }
         }
 
+        Debug.Log("*");
+
         if (action == WeaponAction.Throw)
         {
-            rigController.Play("Base Layer.UnArmed", 0, 0f);
-            //Set current weapon, weapon pickup and its parent
+            //Invoke("EnableAnimation", 5);
+            //rigController.enabled = true;
+
             equippedWeaponParent[weaponSlotIndex] = null;
             equippedWeapon[weaponSlotIndex] = null;
+            Debug.Log("UnArmed");
+            rigController.Play("Base Layer.UnArmed", 0, 0f);
+            //Set current weapon, weapon pickup and its parent
         }
         else if (action == WeaponAction.Pickup)
         {
             equippedWeaponParent[activeWeaponIndex].gameObject.SetActive(false);
         }
+    }
+
+    public void AttachWeapon(WeaponPickup attachedWeapon, Transform parent, int attachedWeaponSlotIndex)
+    {
+        attachedWeapon.transform.parent.gameObject.SetActive(false);
+        SetupUtilities.SetLayers(attachedWeapon.transform.parent, "Local Player", "Local Player", "Effect");
+        Debug.Log(attachedWeapon.transform.parent.name + " is child of" + parent.name);
+        attachedWeapon.noParent = false;
+
+        attachedWeapon.GetComponent<WeaponRecoil>().rigController = rigController;
+        equippedWeapon[attachedWeaponSlotIndex] = attachedWeapon;
+        equippedWeaponParent[attachedWeaponSlotIndex] = attachedWeapon.transform.parent;
+
+        //attachedWeapon.transform.parent.parent = parent;
+        StartCoroutine(Test(attachedWeapon, parent));
+
     }
 
     public void SetupNewWeapon(WeaponStats weaponStats)
@@ -238,6 +268,13 @@ public class ActiveWeapon : MonoBehaviour
     {
         rigController.Rebind();
         rigController.Play("Base Layer.Equip " + equippedWeapon[activeWeaponIndex].weaponStats.name, 0, 0f);
+    }
+
+    IEnumerator Test(WeaponPickup w, Transform p)
+    {
+        Debug.Log(defaultWeapon1.GetComponent<RaycastWeapon>().weaponAnimation.length);
+        yield return new WaitForSeconds(defaultWeapon2.GetComponent<RaycastWeapon>().weaponAnimation.length);
+        w.transform.parent.parent = p;
     }
 
     void SetAnimationDelayded()

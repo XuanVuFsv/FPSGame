@@ -27,6 +27,7 @@ public class WeaponRecoil : MonoBehaviour
     void Update()
     {
         yAxisValue = playerAiming.m_VerticalAxis.Value;
+        if (rigController) rigController.SetBool("isAttack", InputController.Instance.isFire);
 
         if (time > 0)
         {
@@ -41,7 +42,7 @@ public class WeaponRecoil : MonoBehaviour
         return ((index + 1) % recoilPattern.Length);
     }
         
-    public void ResetRecoil()
+    public void ResetRecoil(string weaponName)
     {
         index = 0;
     }
@@ -57,11 +58,12 @@ public class WeaponRecoil : MonoBehaviour
 
         index = NextIndex();
 
-        rigController.Play("RECOIL " + weaponName, 1, 0.0f);
+        rigController.Play("Recoil " + weaponName, 1, 0.0f);
     }
 
     public void SetUpWeaponRecoilForNewWeapon(Cinemachine.CinemachineVirtualCamera newCamera, Animator newRigController)
     {
+        //Debug.Log("SET");
         playerCamera = newCamera;
         rigController = newRigController;
     }

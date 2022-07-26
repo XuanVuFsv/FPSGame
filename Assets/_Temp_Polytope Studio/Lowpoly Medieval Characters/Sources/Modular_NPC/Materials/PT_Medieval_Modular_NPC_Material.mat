@@ -76,7 +76,7 @@ Material:
     - _OCCLUSION: 0.5
     - _OTHERSMOOTHNESS: 0.533
     - _SCLERASMOOTHNESS: 0.5
-    - _SKINSMOOTHNESS: 0
+    - _SKINSMOOTHNESS: 1
     - _SmoothnessOn: 1
     - __dirty: 0
     m_Colors:
@@ -122,6 +122,6 @@ Material:
     - _OTHERCOLOR1: {r: 0.5188679, g: 0.4637216, b: 0.3206212, a: 0}
     - _SCLERACOLOR: {r: 0.9056604, g: 0.8159487, b: 0.8159487, a: 0}
     - _SCLERACOLOR1: {r: 0.9056604, g: 0.8159487, b: 0.8159487, a: 0}
-    - _SKINCOLOR: {r: 0.745283, g: 0.66442686, b: 0.66442686, a: 0}
+    - _SKINCOLOR: {r: 0.5, g: 0.40392157, b: 0.19215687, a: 0}
     - _SKINCOLOR1: {r: 2.02193, g: 1.0081, b: 0.6199315, a: 0}
   m_BuildTextureStacks: []

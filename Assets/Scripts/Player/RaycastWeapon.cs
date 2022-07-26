@@ -40,7 +40,7 @@ public class RaycastWeapon : MonoBehaviour
         weaponStats = GetComponent<WeaponPickup>().weaponStats;
         fpsCameraTransform = Camera.main.transform;
         //initialSwayPosition = transform.localPosition;
-        layerMask = ~((1 << LayerMask.NameToLayer("Ignore Raycast")) << LayerMask.NameToLayer("Only Player"));
+        layerMask = ~((1 << LayerMask.NameToLayer("Ignore Raycast")) << LayerMask.NameToLayer("Only Player") << LayerMask.NameToLayer("Ignore Player"));
 
         hitEffectPrefab = Instantiate(weaponStats.hitEffectPrefab, transform);
         hitEffectPrefab.gameObject.layer = LayerMask.NameToLayer("Default");
@@ -64,6 +64,7 @@ public class RaycastWeapon : MonoBehaviour
 
         if (Physics.Raycast(raycastOrigin.position, fpsCameraTransform.forward, out hit, range, layerMask))
         {
+            //Debug.Log(hit.collider.gameObject.layer);
             hitEffectPrefab.transform.position = hit.point;
             hitEffectPrefab.transform.forward = hit.normal;
             hitEffectPrefab.Emit(5);
@@ -81,7 +82,7 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StopFiring()
     {
-        recoil.ResetRecoil();
+        recoil.ResetRecoil(weaponStats.name);
     }
 
     private void OnDrawGizmos()

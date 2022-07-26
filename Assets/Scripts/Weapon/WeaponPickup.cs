@@ -11,6 +11,8 @@ public class WeaponPickup : MonoBehaviour
     public bool noParent = true;
     public bool canPickup = false;
 
+    [SerializeField]
+    bool inWeaponViewport;
     ActiveWeapon activeWeapon;
 
     static int standardLengthWeponName = 4;
@@ -20,6 +22,7 @@ public class WeaponPickup : MonoBehaviour
     {
         if (noParent)
         {
+            //Debug.Log("CreateWeaponUI");
             CreateWeaponUI();
         }
     }
@@ -31,15 +34,21 @@ public class WeaponPickup : MonoBehaviour
             viewPortPoint = Camera.main.WorldToViewportPoint(transform.position);
             if (activeWeapon == null) activeWeapon = other.GetComponent<ActiveWeapon>();
 
+            //Debug.Log("On" + activeWeapon.name + "Stay");
+
+            inWeaponViewport = WeaponInPickupViewPort();
+
             if (WeaponInPickupViewPort())
             {
                 if (!weaponUI)
                 {
+                    //Debug.Log("Create weapon UI");
                     CreateWeaponUI();
                 }
 
                 if (!canPickup)
                 {
+                    //Debug.Log(viewPortPoint.z);
                     if (viewPortPoint.z < activeWeapon.minDistanceToWeapon || activeWeapon.countWeponInArea == 0)
                     {
                         //Debug.Log(viewPortPoint.z + weaponStats.name);
@@ -52,8 +61,10 @@ public class WeaponPickup : MonoBehaviour
                         weaponUI.gameObject.SetActive(false);
                     }
 
+                    //Debug.Log("Show weapon stat");
                     ShowWeaponStats();
                 }
+                //else ShowWeaponStats();
             }
 
             if (Input.GetKeyDown(KeyCode.H) && canPickup)
@@ -81,7 +92,7 @@ public class WeaponPickup : MonoBehaviour
 
     bool WeaponInPickupViewPort()
     {
-        if (viewPortPoint.z < 3f && Mathf.Abs(viewPortPoint.x - 0.5f) < 0.15f && Mathf.Abs(viewPortPoint.y - 0.5f) < 0.15f)
+        if (viewPortPoint.z < 3f && Mathf.Abs(viewPortPoint.x - 0.5f) < 0.2f && Mathf.Abs(viewPortPoint.y - 0.5f) < 0.2f)
         {
             return true;
         }

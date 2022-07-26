@@ -130,8 +130,9 @@ public class ShootController : MonoBehaviour
     {
         rigController.SetTrigger("ReloadAK");
         isReloading = true;
-        yield return new WaitForSeconds(autoReloadDelay);
+        yield return new WaitForSeconds(1);
         //Restore ammo when reloading
+        rigController.SetTrigger("ReloadAK");
         currentAmmo = ammo;
         outOfAmmo = false;
         isReloading = false;

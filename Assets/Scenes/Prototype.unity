@@ -214,7 +214,7 @@ Transform:
   m_GameObject: {fileID: 175245911}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.236964, y: 1.23, z: 1.2250257}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -236,7 +236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &889511097
 AudioListener:
   m_ObjectHideFlags: 0
@@ -395,6 +395,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1001 &1587215261
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -11.750311
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.0360816
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 18.505512
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227376591441928165, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077879612320158236, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
+      propertyPath: m_Name
+      value: BaseObject
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ab7985bb272b7d44eaac108b8fa825c2, type: 3}
 --- !u!1 &1711533546
 GameObject:
   m_ObjectHideFlags: 0
@@ -1718,44 +1775,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1946862227020443399}
-  xAxis:
-    Value: 0
-    m_SpeedMode: 0
-    m_MaxSpeed: 300
-    m_AccelTime: 0.02
-    m_DecelTime: 0.02
-    m_InputAxisName: Mouse X
-    m_InputAxisValue: 0
-    m_InvertInput: 0
-    m_MinValue: -180
-    m_MaxValue: 180
-    m_Wrap: 1
-    m_Recentering:
-      m_enabled: 0
-      m_WaitTime: 0
-      m_RecenteringTime: 0
-      m_LegacyHeadingDefinition: 0
-      m_LegacyVelocityFilterStrength: 0
-  yAxis:
-    Value: 0
-    m_SpeedMode: 0
-    m_MaxSpeed: 300
-    m_AccelTime: 0.02
-    m_DecelTime: 0.02
-    m_InputAxisName: Mouse Y
-    m_InputAxisValue: 0
-    m_InvertInput: 1
-    m_MinValue: -90
-    m_MaxValue: 90
-    m_Wrap: 0
-    m_Recentering:
-      m_enabled: 0
-      m_WaitTime: 0
-      m_RecenteringTime: 0
-      m_LegacyHeadingDefinition: 0
-      m_LegacyVelocityFilterStrength: 0
-  turnSpeed: {x: 3.5, y: 3.5, z: 0}
-  cameraSpeed: 1
   fps: 0
 --- !u!114 &4042551411375642561
 MonoBehaviour:
@@ -1797,7 +1816,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &4042551411375642564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1812,7 +1831,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
-  fireValue: 0
   isIdle: 0
   isWalk: 0
   isWalkRight: 0
@@ -1821,16 +1839,17 @@ MonoBehaviour:
   isWalkForward: 0
   isAim: 0
   isFire: 0
-  isAutoFire: 0
-  isSingleFire: 0
+  isReload: 0
   isManipulationFire: 0
   isJump: 0
   isBrake: 0
   horizontal: 0
   vertical: 0
+  rawHorizontal: 0
+  rawVertical: 0
   mouseX: 0
   mouseY: 0
-  jumpValue: 0
+  fireValue: 0
 --- !u!114 &4042551411375642565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1844,23 +1863,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 7327914522910463746}
+  weaponAnimators: []
   movementController: {fileID: 4042551411375642566}
-  inLongIdle: 0
-  timeOfPreLanding: 1
-  endFirstBullet: 1
+  endFireSession: 1
   endFireAnimation: 1
-  isEndChangeAnimationIdleCoroutine: 1
   currentFireAnimation: 
-  hashName: 0
   timeEndFireAnimation: 0.5
-  countParameters: 0
-  countParametersAnimator: 0
-  variableTestInformations:
-  - 
-  - 
-  - 
-  parameterNames: []
-  parameterInformations: []
   isUseVSync: 1
   targetFrameRate: 60
 --- !u!114 &4042551411375642566
@@ -1875,29 +1883,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a766bcd6565a5624080d1a825c9e6369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  physicMaterials:
-  - {fileID: 13400000, guid: e52fb17f9b1e7fd48b8955f1391d3688, type: 2}
-  - {fileID: 13400000, guid: 01571ba68fb2dad46aa03094ab219579, type: 2}
-  nextPosition: {x: 0, y: 0, z: 0}
-  nextRotation: {x: 0, y: 0, z: 0, w: 0}
-  onGrounded: 0
-  onAir: 1
-  isReadyToJump: 1
+  groundCheckLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  runSpeed: 0
+  walkSpeed: 0
+  onAimOrFireSpeed: 0
+  jumpForce: 0
+  jumpDelay: 0
+  groundCheckDistance: 0.05
+  skinWidth: 0.02
+  slopeLimit: 0
+  currentSlope: 0
+  readyToJump: 1
   allowJump: 1
-  speedMove: 7
-  speedWalk: 7
-  speedManipulationFire: 4
-  forceJump: 5000
-  pauseJumpTime: 0.2
-  followTargetTransform: {fileID: 6870160921869402808}
+  isGrounded: 0
   rigidbody: {fileID: 0}
   movementVector: {x: 0, y: 0, z: 0}
-  turnSpeed: {x: -3, y: 3, z: 0}
-  limitAngleY: {x: 50, y: 300}
-  rotationLerp: 0.5
-  collisonCollider: 
-  cubeRigidbody: {fileID: 0}
-  forceTest: 1
+  k_GroundCheckDistanceInAir: 0.07
 --- !u!114 &4042551411375642567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1911,10 +1914,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raycastWeapon: {fileID: 0}
-  fireRate: 10
   isFire: 0
-  animator: {fileID: 0}
-  movementController: {fileID: 0}
+  rigController: {fileID: 0}
+  animationEvents: {fileID: 0}
+  leftHand: {fileID: 0}
+  magazine: {fileID: 0}
+  magazineHand: {fileID: 0}
+  fireRate: 10
+  autoReloadDelay: 0
+  ammo: 0
+  autoReload: 0
+  currentAmmo: 0
+  shootingTime: 0
+  sparkParticles: {fileID: 0}
+  muzzleParticles: {fileID: 0}
+  maxRandomValue: 5
+  minSparkEmission: 1
+  maxSparkEmission: 7
+  randomMuzzleflash: 0
+  enableMuzzleflash: 1
+  enableSparks: 1
+  muzzleflashLight: {fileID: 0}
+  lightDuration: 0.02
 --- !u!136 &4042551411375642570
 CapsuleCollider:
   m_ObjectHideFlags: 0
