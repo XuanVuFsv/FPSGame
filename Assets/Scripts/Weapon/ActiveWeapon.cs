@@ -30,6 +30,7 @@ public class ActiveWeapon : MonoBehaviour
     public Transform weaponPivot;
     public Transform rightHandHolder, leftHandHolder;
     public Transform gunCamera;
+    public Transform droppedWeapon;
     public float minDistanceToWeapon = 5, countWeponInArea = 0;
     public int activeWeaponIndex = 3;
     public bool isHoldWeapon = false;
@@ -91,9 +92,25 @@ public class ActiveWeapon : MonoBehaviour
     {
         rigController.SetBool("isHoldWeapon", isHoldWeapon);
 
+
+        if (Input.GetKeyDown(KeyCode.KeypadEnter)) Time.timeScale = 1;
+
         if (Input.GetKeyDown(KeyCode.G))
         {
-            DropWeapon(WeaponAction.Throw, activeWeaponIndex);
+            if (activeWeaponIndex != 2)
+            {
+                DropWeapon(WeaponAction.Throw, activeWeaponIndex);
+
+                if (!GetWeapon(0) || !GetWeapon(1))
+                {
+                    SwitchWeapon(equippedWeapon[2]);
+                }
+                else
+                {
+                    if (activeWeaponIndex == 0) SwitchWeapon(equippedWeapon[1]);
+                    else SwitchWeapon(equippedWeapon[0]);
+                }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -165,6 +182,7 @@ public class ActiveWeapon : MonoBehaviour
         {
             activeWeaponIndex = weaponSlotIndex;
             equippedWeaponParent[weaponSlotIndex].parent = weaponPivot;
+            Debug.Log(equippedWeaponParent[weaponSlotIndex].name + " " + equippedWeapon[weaponSlotIndex].name);
             SetWeaponAnimation();
         }
         else
@@ -173,7 +191,6 @@ public class ActiveWeapon : MonoBehaviour
             newWeapon.transform.parent.gameObject.SetActive(false);
         }
         equippedWeaponParent[weaponSlotIndex].parent = weaponActivateSlots[weaponSlotIndex];
-
         //if (!isExistWeaponSlot && isHoldWeapon && activeWeaponIndex != 2) newWeapon.transform.parent.gameObject.SetActive(false);
         //activeWeaponIndex = weaponSlotIndex;
         isHoldWeapon = true;
@@ -199,45 +216,37 @@ public class ActiveWeapon : MonoBehaviour
                 return;
             }
             //Throw or Pickup
-            //Set parent for weapon and change noParent value, layers
-
-            //rigController.enabled = false;
-
-            equippedWeaponParent[weaponSlotIndex].parent = null;
+            //Set parent for weapon and change noParent value, layers            
+            equippedWeapon[weaponSlotIndex].GetComponent<WeaponRecoil>().rigController = null;
             equippedWeapon[weaponSlotIndex].noParent = true;
+
+            droppedWeapon = equippedWeaponParent[weaponSlotIndex].transform;
 
             SetupUtilities.SetLayers(equippedWeaponParent[weaponSlotIndex], "Ignore Player", "Only Player", null);
 
-            //parent.localEulerAngles = Vector3.zero;
             equippedWeaponParent[weaponSlotIndex].gameObject.GetComponent<Rigidbody>().isKinematic = false;
-            //parent.gameObject.GetComponent<Rigidbody>().AddForce(currentWeapon.forward, ForceMode.Impulse);
 
             //Animation setup
             isHoldWeapon = false;
-
             if (!equippedWeapon[weaponSlotIndex].weaponUI)
             {
                 equippedWeapon[weaponSlotIndex].CreateWeaponUI();
             }
         }
 
-        Debug.Log("*");
-
         if (action == WeaponAction.Throw)
         {
-            //Invoke("EnableAnimation", 5);
-            //rigController.enabled = true;
+            droppedWeapon = equippedWeaponParent[weaponSlotIndex];
 
+            droppedWeapon.parent = null;
             equippedWeaponParent[weaponSlotIndex] = null;
             equippedWeapon[weaponSlotIndex] = null;
-            Debug.Log("UnArmed");
-            rigController.Play("Base Layer.UnArmed", 0, 0f);
-            //Set current weapon, weapon pickup and its parent
         }
         else if (action == WeaponAction.Pickup)
         {
-            equippedWeaponParent[activeWeaponIndex].gameObject.SetActive(false);
+            //equippedWeaponParent[activeWeaponIndex].gameObject.SetActive(false);
         }
+        Debug.Log(droppedWeapon.position);
     }
 
     public void AttachWeapon(WeaponPickup attachedWeapon, Transform parent, int attachedWeaponSlotIndex)
@@ -251,7 +260,6 @@ public class ActiveWeapon : MonoBehaviour
         equippedWeapon[attachedWeaponSlotIndex] = attachedWeapon;
         equippedWeaponParent[attachedWeaponSlotIndex] = attachedWeapon.transform.parent;
 
-        //attachedWeapon.transform.parent.parent = parent;
         StartCoroutine(Test(attachedWeapon, parent));
 
     }
@@ -266,7 +274,15 @@ public class ActiveWeapon : MonoBehaviour
 
     void SetWeaponAnimation()
     {
-        rigController.Rebind();
+        Vector3 droppedWeaponPosition = Vector3.zero;
+        if (droppedWeapon)
+        {
+            droppedWeaponPosition = droppedWeapon.position;
+            rigController.Rebind();
+            droppedWeapon.position = droppedWeaponPosition;
+        }
+        else rigController.Rebind();
+
         rigController.Play("Base Layer.Equip " + equippedWeapon[activeWeaponIndex].weaponStats.name, 0, 0f);
     }
 
@@ -275,6 +291,11 @@ public class ActiveWeapon : MonoBehaviour
         Debug.Log(defaultWeapon1.GetComponent<RaycastWeapon>().weaponAnimation.length);
         yield return new WaitForSeconds(defaultWeapon2.GetComponent<RaycastWeapon>().weaponAnimation.length);
         w.transform.parent.parent = p;
+    }
+
+    void Test1()
+    {
+        droppedWeapon.parent = null;
     }
 
     void SetAnimationDelayded()
