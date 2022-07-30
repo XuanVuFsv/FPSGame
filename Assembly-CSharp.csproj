@@ -114,7 +114,7 @@
     <Compile Include="Assets\Project\WallBehaviour.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
     <Compile Include="Assets\AssetPackage\BigRookGames\_AssetPacks\Stylized Weapon Pack\M4 Scoped Assault Rifle\Scripts\GunfireController.cs" />
-    <Compile Include="Assets\Scripts\Weapon\WeaponRecoil.cs" />
+    <Compile Include="Assets\Scripts\Weapon\CameraShake.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\ChatGui.cs" />
     <Compile Include="Assets\RockVR\Video\Scripts\AudioCapture.cs" />
     <Compile Include="Assets\RockVR\Common\Scripts\FPSDisplay.cs" />

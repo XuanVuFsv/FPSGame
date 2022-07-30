@@ -22,7 +22,6 @@ public class WeaponPickup : MonoBehaviour
     {
         if (noParent)
         {
-            //Debug.Log("CreateWeaponUI");
             CreateWeaponUI();
         }
     }
@@ -34,24 +33,19 @@ public class WeaponPickup : MonoBehaviour
             viewPortPoint = Camera.main.WorldToViewportPoint(transform.position);
             if (activeWeapon == null) activeWeapon = other.GetComponent<ActiveWeapon>();
 
-            //Debug.Log("On" + activeWeapon.name + "Stay");
-
             inWeaponViewport = WeaponInPickupViewPort();
 
-            if (WeaponInPickupViewPort())
+            if (inWeaponViewport)
             {
                 if (!weaponUI)
                 {
-                    //Debug.Log("Create weapon UI");
                     CreateWeaponUI();
                 }
 
                 if (!canPickup)
                 {
-                    //Debug.Log(viewPortPoint.z);
                     if (viewPortPoint.z < activeWeapon.minDistanceToWeapon || activeWeapon.countWeponInArea == 0)
                     {
-                        //Debug.Log(viewPortPoint.z + weaponStats.name);
                         canPickup = true;
                         activeWeapon.minDistanceToWeapon = viewPortPoint.z;
                         activeWeapon.countWeponInArea++;
@@ -60,18 +54,20 @@ public class WeaponPickup : MonoBehaviour
                     {
                         weaponUI.gameObject.SetActive(false);
                     }
-
-                    //Debug.Log("Show weapon stat");
-                    ShowWeaponStats();
                 }
-                //else ShowWeaponStats();
+
+                if (canPickup) ShowWeaponStats();
+
+
             }
 
             if (Input.GetKeyDown(KeyCode.H) && canPickup)
             {
+                Debug.Log("Pick up");
                 ActiveWeapon newActiveWeapon = other.GetComponent<ActiveWeapon>();
+                bool isExistWeaponSlot = ActiveWeapon.GetWeapon((int)weaponSlot);
                 newActiveWeapon.DropWeapon(ActiveWeapon.WeaponAction.Pickup, (int)weaponSlot);
-                newActiveWeapon.EquipWeapon(ActiveWeapon.WeaponAction.Pickup, this);
+                newActiveWeapon.EquipWeapon(ActiveWeapon.WeaponAction.Pickup, this, false, isExistWeaponSlot);
                 newActiveWeapon.SetupNewWeapon(weaponStats);
             }
         }
@@ -84,7 +80,6 @@ public class WeaponPickup : MonoBehaviour
             if (activeWeapon.countWeponInArea > 0) activeWeapon.countWeponInArea--;
             activeWeapon = null;
 
-            //Debug.Log("Exit" + weaponStats.name);
             weaponUI.gameObject.SetActive(false);
             canPickup = false;
         }
@@ -107,7 +102,6 @@ public class WeaponPickup : MonoBehaviour
 
     public void CreateWeaponUI()
     {
-        //Debug.Log("CREATE WEAPON UI FOR " + weaponStats.name);
         weaponUI = Instantiate(weaponUIPrefab, transform.parent);
         weaponUI.localScale = CalcualteLocalScale(0.19f, 0.19f, 0.19f, transform.parent.localScale);
         int multiplier = weaponStats.name.Length - standardLengthWeponName;

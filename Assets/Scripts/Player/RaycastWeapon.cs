@@ -5,7 +5,7 @@ using UnityEngine;
 public class RaycastWeapon : MonoBehaviour
 {
     public GameObject bulletPrefab, magazine;
-    public WeaponRecoil recoil;
+    public CameraShake recoil;
 
     public Transform raycastOrigin;
     //public Transform raycastDestination;
@@ -36,7 +36,7 @@ public class RaycastWeapon : MonoBehaviour
 
     private void Start()
     {
-        recoil = GetComponent<WeaponRecoil>();
+        recoil = GetComponent<CameraShake>();
         weaponStats = GetComponent<WeaponPickup>().weaponStats;
         fpsCameraTransform = Camera.main.transform;
         //initialSwayPosition = transform.localPosition;
