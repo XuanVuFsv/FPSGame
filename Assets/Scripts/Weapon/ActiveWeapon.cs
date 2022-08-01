@@ -30,7 +30,8 @@ public class ActiveWeapon : MonoBehaviour
     public Transform weaponPivot;
     public Transform rightHandHolder, leftHandHolder;
     public Transform gunCamera;
-    public float minDistanceToWeapon = 5, countWeponInArea = 0;
+    public List<WeaponPickup> triggerWeaponList = new List<WeaponPickup>();
+    public float minDistanceToWeapon = 5/*, countWeponInArea = 0*/;
     public int activeWeaponIndex = 3;
     public bool isHoldWeapon = false;
 
@@ -282,6 +283,38 @@ public class ActiveWeapon : MonoBehaviour
     {
         yield return new WaitForSeconds(defaultWeapon2.GetComponent<RaycastWeapon>().weaponAnimation.length);
         weapon.transform.parent.parent = weaponParent;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (!triggerWeaponList.Contains(other.GetComponent<WeaponPickup>()))
+        {
+            triggerWeaponList.Add(other.GetComponent<WeaponPickup>());
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (triggerWeaponList.Contains(other.GetComponent<WeaponPickup>()))
+        {
+            //minDistanceToWeapon = 5;
+            triggerWeaponList.Remove(other.GetComponent<WeaponPickup>());
+        }
+    }
+
+    public WeaponPickup GetNearestWeapon()
+    {
+        WeaponPickup weapon = null;
+        float min = 5;
+        for (int i = 0; i < triggerWeaponList.Count; i++)
+        {
+            if (triggerWeaponList[i].viewPortPoint.z <= min && triggerWeaponList[i].inWeaponViewport)
+            {
+                min = triggerWeaponList[i].viewPortPoint.z;
+                weapon = triggerWeaponList[i];
+            }
+        }
+        return weapon;
     }
 
     //[ContextMenu("Save Weapon Pose")]

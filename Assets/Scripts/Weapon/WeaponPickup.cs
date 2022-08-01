@@ -11,8 +11,7 @@ public class WeaponPickup : MonoBehaviour
     public bool noParent = true;
     public bool canPickup = false;
 
-    [SerializeField]
-    bool inWeaponViewport;
+    public bool inWeaponViewport;
     ActiveWeapon activeWeapon;
 
     static int standardLengthWeponName = 4;
@@ -24,6 +23,35 @@ public class WeaponPickup : MonoBehaviour
         {
             CreateWeaponUI();
         }
+    }
+
+    private void Update()
+    {
+        if (inWeaponViewport && weaponUI)
+        {
+            if (weaponSlot == ActiveWeapon.WeaponSlot.Primary)
+            {
+                weaponUI.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, -transform.parent.localEulerAngles.z);
+            }
+            else
+            {
+                weaponUI.GetComponent<RectTransform>().localEulerAngles = new Vector3(-transform.parent.localEulerAngles.x, 0, 0);
+            }
+        }
+    }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Player") && noParent)
+    //    {
+    //        if (activeWeapon == null) activeWeapon = other.GetComponent<ActiveWeapon>();
+    //        activeWeapon.countWeponInArea++;
+    //    }
+    //}
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(Camera.main.transform.position, transform.position);
     }
 
     private void OnTriggerStay(Collider other)
@@ -42,33 +70,57 @@ public class WeaponPickup : MonoBehaviour
                     CreateWeaponUI();
                 }
 
-                if (!canPickup)
+                if (activeWeapon.triggerWeaponList.Count == 1)
                 {
-                    if (viewPortPoint.z < activeWeapon.minDistanceToWeapon || activeWeapon.countWeponInArea == 0)
+                    canPickup = true;
+                    ShowWeaponStats();
+                }
+                else
+                {
+                    //if (viewPortPoint.z < activeWeapon.minDistanceToWeapon)
+                    //{
+                    //    activeWeapon.minDistanceToWeapon = viewPortPoint.z;
+
+                    //    if (!canPickup)
+                    //    {
+                    //        //Debug.Log("Show" + transform.parent.name);
+                    //        canPickup = true;
+                    //    }
+                    //    else ShowWeaponStats();
+                    //}
+                    //else
+                    //{
+                    //    canPickup = false;
+                    //    weaponUI.gameObject.SetActive(false);
+                    //}
+                    if (this == activeWeapon.GetNearestWeapon())
                     {
                         canPickup = true;
-                        activeWeapon.minDistanceToWeapon = viewPortPoint.z;
-                        activeWeapon.countWeponInArea++;
+                        ShowWeaponStats();
                     }
                     else
                     {
+                        canPickup = false;
                         weaponUI.gameObject.SetActive(false);
                     }
                 }
-
-                if (canPickup) ShowWeaponStats();
-
-
+            }
+            else
+            {
+                //activeWeapon.minDistanceToWeapon = 5;
+                canPickup = false;
+                weaponUI.gameObject.SetActive(false);
             }
 
             if (Input.GetKeyDown(KeyCode.H) && canPickup)
             {
-                Debug.Log("Pick up");
-                ActiveWeapon newActiveWeapon = other.GetComponent<ActiveWeapon>();
+                //ActiveWeapon newActiveWeapon = other.GetComponent<ActiveWeapon>();
+                //Debug.Log(newActiveWeapon == activeWeapon);
+                activeWeapon.triggerWeaponList.Remove(this);
                 bool isExistWeaponSlot = ActiveWeapon.GetWeapon((int)weaponSlot);
-                newActiveWeapon.DropWeapon(ActiveWeapon.WeaponAction.Pickup, (int)weaponSlot);
-                newActiveWeapon.EquipWeapon(ActiveWeapon.WeaponAction.Pickup, this, false, isExistWeaponSlot);
-                newActiveWeapon.SetupNewWeapon(weaponStats);
+                activeWeapon.DropWeapon(ActiveWeapon.WeaponAction.Pickup, (int)weaponSlot);
+                activeWeapon.EquipWeapon(ActiveWeapon.WeaponAction.Pickup, this, false, isExistWeaponSlot);
+                activeWeapon.SetupNewWeapon(weaponStats);
             }
         }
     }
@@ -77,7 +129,7 @@ public class WeaponPickup : MonoBehaviour
     {
         if (other.CompareTag("Player") && noParent)
         {
-            if (activeWeapon.countWeponInArea > 0) activeWeapon.countWeponInArea--;
+            //if (activeWeapon.countWeponInArea > 0) activeWeapon.countWeponInArea--;
             activeWeapon = null;
 
             weaponUI.gameObject.SetActive(false);
@@ -87,7 +139,7 @@ public class WeaponPickup : MonoBehaviour
 
     bool WeaponInPickupViewPort()
     {
-        if (viewPortPoint.z < 3f && Mathf.Abs(viewPortPoint.x - 0.5f) < 0.2f && Mathf.Abs(viewPortPoint.y - 0.5f) < 0.2f)
+        if (viewPortPoint.z < 3.5f && Mathf.Abs(viewPortPoint.x - 0.5f) < 0.35f && Mathf.Abs(viewPortPoint.y - 0.5f) < 0.35f)
         {
             return true;
         }
