@@ -121,7 +121,7 @@ public class MovementController : MonoBehaviour
         m_GroundNormal = Vector3.up;
 
         // only try to detect ground if it's been a short amount of time since last jump; otherwise we may snap to the ground instantly after we try jumping
-        if (readyToJump)
+        if (true)
         {
             {
                 //Debug.LogFormat("GetCapsuleBottomHemisphere: {0} GetCapsuleTopHemisphere: {1} height: {2}", GetCapsuleBottomHemisphere(), GetCapsuleTopHemisphere(capsuleCollider.height), capsuleCollider.height);
@@ -206,16 +206,17 @@ public class MovementController : MonoBehaviour
     {
         readyToJump = false;
         mainCharacterAnimator.SetJumpAnimationParameter(isGrounded, true, jumpProcessValue, 0.5f);
-        StartCoroutine(DelayJump());
+        //StartCoroutine(DelayJump());
+        readyToJump = true;
         yield return new WaitForSeconds((18 / 31) * (16 / 3)); //play a part of animation before jump t = 8/15 * 0.533 8/15 frame length = 0.533s
         rigidbody.AddForce(transform.up * jumpForce);
     }
 
-    IEnumerator DelayJump()
-    {
-        yield return new WaitForSeconds(jumpDelay);
-        readyToJump = true;
-    }
+    //IEnumerator DelayJump()
+    //{
+    //    yield return new WaitForSeconds(jumpDelay);
+    //    readyToJump = true;
+    //}
 
     //public void UpdateCapsuleCollider(bool isJump)
     //{

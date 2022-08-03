@@ -202,7 +202,7 @@ public class MainCharacterAnimator : MonoBehaviour
     {
         animator.SetBool("isJumporFloat", isJumporFloat);
         animator.SetFloat("jumpProcessValue", jumpProcessValue);
-        if (!isGrounded && isJumporFloat && timeHoldAnimation != 0) StartCoroutine(HoldFloatJumpAnimation(timeHoldAnimation));
+        //if (!isGrounded && isJumporFloat && timeHoldAnimation != 0) StartCoroutine(HoldFloatJumpAnimation(timeHoldAnimation));
     }
 
     public IEnumerator HoldFloatJumpAnimation(float timeHoldAnimation)
