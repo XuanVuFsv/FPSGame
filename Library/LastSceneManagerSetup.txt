@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/Assault_Rifle_01_Demo.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0
