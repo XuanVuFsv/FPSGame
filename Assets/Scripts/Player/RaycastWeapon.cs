@@ -63,18 +63,17 @@ public class RaycastWeapon : MonoBehaviour
 
         if (Physics.Raycast(raycastOrigin.position, fpsCameraTransform.forward, out hit, range, layerMask))
         {
-            Debug.Log(hit.collider.gameObject.layer);
             hitEffectPrefab.transform.position = hit.point;
             hitEffectPrefab.transform.forward = hit.normal;
             hitEffectPrefab.Emit(5);
 
             PoolingManager.Instance.UseOneHItEffect(hit);
             //tracer.transform.position = hit.point;
-            //if (hit.transform.gameObject.tag == "Wall")
-            //{
-            //    GameObject wall = hit.transform.gameObject;
-            //    WallSpawner.Instance.DestroyWall(wall.GetComponent<WallBehaviour>().index, hit);
-            //}
+            if (hit.transform.gameObject.tag == "Wall")
+            {
+                GameObject wall = hit.transform.gameObject;
+                WallSpawner.Instance.DestroyWall(wall.GetComponent<WallBehaviour>().index, hit);
+            }
         }
         //else tracer.transform.position += fpsCameraTransform.forward * range;
     }

@@ -12,18 +12,14 @@ public class MovementController : MonoBehaviour
     public float skinWidth = 0.02f;
     public float slopeLimit;
     public float currentSlope;
-    //public bool onGround, onAir;
     public bool readyToJump = true, allowJump = true;
     public bool isGrounded;
 
-    //[SerializeField]
     private Transform followTargetTransform;
     [SerializeField]
     private new Rigidbody rigidbody;
     [SerializeField]
     private Vector3 movementVector;
-    //[SerializeField]
-    //private string collisonCollider;
 
     private InputController inputController;
     private CapsuleCollider capsuleCollider;
@@ -44,50 +40,29 @@ public class MovementController : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider>();
         inputController = GetComponent<InputController>();
         mainCharacterAnimator = GetComponent<MainCharacterAnimator>();
-        //capsuleCollider.material = physicMaterials[0];
     }
 
     private void Update()
     {
         GroundCheck();
+
+        // jumping
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Jump");
+            if (isGrounded)
+            {
+                isGrounded = false;
+                m_GroundNormal = Vector3.up;
+                Jump(1);
+            }
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         Move();
-        {
-            //if (inputController.isJump && readyToJump && allowJump)
-            //{
-            //    if (onGround)
-            //    {
-            //        StartCoroutine(Jump(1));
-            //    }
-            //    else if (!onGround && rigidbody.velocity.y <= -5)
-            //    {
-            //        StartCoroutine(Jump(0));
-            //    }
-            //}
-        }
-
-        // jumping
-        if (isGrounded && inputController.isJump)
-        {
-            isGrounded = false;
-            m_GroundNormal = Vector3.up;
-            StartCoroutine(Jump(1));
-        }
-
-        {
-            //if (!inputController.isWalk)
-            //{
-            //    capsuleCollider.material = physicMaterials[0];
-            //}
-            //else
-            //{
-            //    capsuleCollider.material = physicMaterials[1];
-            //}
-        }
 
         #region ExecuteTest
         //cubeRigidbody.transform.Rotate(Vector3.forward * forceTest);
@@ -100,12 +75,10 @@ public class MovementController : MonoBehaviour
 
         if ((inputController.rawVertical > 0) && !inputController.isAim)
         {
-            //rigidbody.MovePosition(rigidbody.position + movementVector * speedMove * Time.deltaTime);
             runSpeed = walkSpeed;
         }
         else
         {
-            //rigidbody.MovePosition(rigidbody.position + movementVector * speedMove * 0.5f * Time.deltaTime);
             runSpeed = onAimOrFireSpeed;
         }
 
@@ -147,9 +120,6 @@ public class MovementController : MonoBehaviour
                     IsNormalUnderSlopeLimit(m_GroundNormal))
                 {
                     isGrounded = true;
-                    //rigidbody.MovePosition(Vector3.down * hit.distance);
-                    //UpdateCapsuleCollider(false);
-                    //allowJump = true;
                     if (mainCharacterAnimator.animator.GetBool("isJumporFloat"))
                     {
                         mainCharacterAnimator.SetJumpAnimationParameter(isGrounded, false, 0, 0);
@@ -158,7 +128,6 @@ public class MovementController : MonoBehaviour
                 else if(!IsNormalUnderSlopeLimit(m_GroundNormal))
                 {
                     isGrounded = true;
-                    //UpdateCapsuleCollider(true);
                     //Debug.Log("Not same direction or slope");
                 }
             }
@@ -170,7 +139,6 @@ public class MovementController : MonoBehaviour
                     //Debug.Log("Falling");
                     mainCharacterAnimator.SetJumpAnimationParameter(isGrounded, true, 0, 0);
                 }
-                //UpdateCapsuleCollider(true);
                 //Debug.Log("Not collide ground");
             }
         }
@@ -202,41 +170,13 @@ public class MovementController : MonoBehaviour
         return transform.position + (transform.up * (atHeight - capsuleCollider.radius));
     }
 
-    IEnumerator Jump(float jumpProcessValue)
+    void Jump(float jumpProcessValue)
     {
-        readyToJump = false;
+        //readyToJump = false;
         mainCharacterAnimator.SetJumpAnimationParameter(isGrounded, true, jumpProcessValue, 0.5f);
         //StartCoroutine(DelayJump());
         readyToJump = true;
-        yield return new WaitForSeconds((18 / 31) * (16 / 3)); //play a part of animation before jump t = 8/15 * 0.533 8/15 frame length = 0.533s
+        //yield return new WaitForSeconds((18 / 31) * (16 / 3)); //play a part of animation before jump t = 8/15 * 0.533 8/15 frame length = 0.533s
         rigidbody.AddForce(transform.up * jumpForce);
     }
-
-    //IEnumerator DelayJump()
-    //{
-    //    yield return new WaitForSeconds(jumpDelay);
-    //    readyToJump = true;
-    //}
-
-    //public void UpdateCapsuleCollider(bool isJump)
-    //{
-    //    if (isJump)
-    //    {
-    //        onGround = false;
-    //        onAir = true;
-    //        return;
-    //    }
-    //    onGround = true;
-    //    onAir = false;
-    //}
-
-    //private void OnCollisionStay(Collision collision)
-    //{
-    //    collisonCollider = collision.collider.name;
-    //}
-
-    //private void OnCollisionExit(Collision collision)
-    //{
-    //    collisonCollider = "exit";
-    //}
 }

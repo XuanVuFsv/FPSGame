@@ -200,7 +200,7 @@ public class ActiveWeapon : MonoBehaviour
         //Don't run this function when don't hold any weapon or throw a null weapon
         if (!equippedWeapon[weaponSlotIndex])
         {
-            Debug.Log("Don't have weapon index: " + weaponSlotIndex);
+            //Debug.Log("Don't have weapon index: " + weaponSlotIndex);
             isExsitWeaponSlot = false;
         }
         else

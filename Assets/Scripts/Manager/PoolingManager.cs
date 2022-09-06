@@ -42,6 +42,7 @@ public class PoolingManager : MonoBehaviour
         for (int i = 0; i < spawnCount; i++)
         {
             BulletHoleBehaviour hitEffect = Instantiate(hitEffectPrefab);
+
             hitEffect.transform.parent = transform;
             hitEffect.gameObject.SetActive(false);
             hitEffect.index = i;
@@ -51,14 +52,12 @@ public class PoolingManager : MonoBehaviour
 
     public void UseOneHItEffect(RaycastHit hit)
     {
-        //Debug.Log("current index can use: " + indexReadyToUse);
-
         if (hitEffectList[indexReadyToUse].gameObject.activeInHierarchy) indexReadyToUse = indexAlwaysReady;
 
         if (indexReadyToUse >= spawnCount)
         {
-            //Debug.Log("Add new hole, index: " + hitEffectList.Count);
             BulletHoleBehaviour hitEffect = Instantiate(hitEffectPrefab);
+
             hitEffect.transform.parent = transform;
             hitEffect.gameObject.SetActive(false);
             hitEffect.index = hitEffectList.Count;
@@ -66,14 +65,10 @@ public class PoolingManager : MonoBehaviour
         }
 
         hitEffectList[indexReadyToUse].gameObject.SetActive(true);
-        //hitEffectList[indexReadyToUse].transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(hit.normal));
         hitEffectList[indexReadyToUse].transform.position = hit.point;
         hitEffectList[indexReadyToUse].transform.rotation = Quaternion.LookRotation(hit.normal);
-        //GameObject newCube = Instantiate(test);
-        //newCube.transform.position = hit.point;
-        //newCube.transform.rotation = Quaternion.LookRotation(hit.normal);
+
         indexReadyToUse++;
         indexAlwaysReady = indexReadyToUse;
-        //Debug.Log("current index after use: " + indexReadyToUse + " " + indexAlwaysReady);
     }
 }

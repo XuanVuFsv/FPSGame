@@ -121,8 +121,8 @@
     <Compile Include="Assets\_Temp_Low Poly FPS Pack - Free (Sample)\Components\Scripts\Misc\LookAtCamera.cs" />
     <Compile Include="Assets\_Temp_Low Poly FPS Pack - Free (Sample)\Components\Scripts\Weapon_Scripts\HandgunScriptLPFP.cs" />
     <Compile Include="Assets\Scripts\Manager\BulletHoleBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Weapon\BulletController.cs" />
     <Compile Include="Assets\_Temp_Effect\Misc Effects\Scripts\SpawnEffect.cs" />
+    <Compile Include="Assets\Scripts\Weapon\BulletController.cs" />
     <Compile Include="Assets\RockVR\Video\Scripts\Config.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\TextToggleIsOnTransition.cs" />
     <Compile Include="Assets\Project\GameSettings.cs" />
@@ -177,6 +177,7 @@
      <None Include="Assets\_Temp_Polytope Studio\Lowpoly Medieval Environments\Sources\Shaders\PT_Rock_Shader_VS.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
      <None Include="Assets\Photon\PhotonUnityNetworking\readme.txt" />
+     <None Include="Assets\Photon\PhotonChat\Demos\DemoChat\Files\eurof_tt.txt" />
      <None Include="Assets\RockVR\Video\Shaders\Cubemap2EquirectangularPro.shader" />
      <None Include="Assets\Photon\PhotonLibs\netstandard2.0\Photon3Unity3D.dll" />
      <None Include="Assets\_Temp_Polytope Studio\Lowpoly Medieval Environments\Sources\Shaders\PT_Vegetation_Plants_Shader_VS.shader" />
@@ -814,8 +815,14 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Polybrush.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Polybrush.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.ProBuilder">
       <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Polybrush">
+      <HintPath>Library\ScriptAssemblies\Unity.Polybrush.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Animation.Rigging">
       <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.dll</HintPath>
@@ -844,18 +851,8 @@
     <Reference Include="Unity.Animation.Rigging.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Polybrush.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Polybrush.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Polybrush">
-      <HintPath>Library\ScriptAssemblies\Unity.Polybrush.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="PhotonChat.csproj">
-      <Project>{FA725516-54B8-31AC-6494-B32C39232FB3}</Project>
-      <Name>PhotonChat</Name>
-    </ProjectReference>
     <ProjectReference Include="PlayFabSDKEditor.csproj">
       <Project>{6DA15BA5-5B61-A495-FB08-19E51D56242D}</Project>
       <Name>PlayFabSDKEditor</Name>
@@ -868,33 +865,9 @@
       <Project>{C54669FC-3BB8-4985-3C56-90437D8F755C}</Project>
       <Name>PlayFab</Name>
     </ProjectReference>
-    <ProjectReference Include="PhotonUnityNetworking.Editor.csproj">
-      <Project>{89930DF3-D78E-54F2-81F9-3C7B696F0DFF}</Project>
-      <Name>PhotonUnityNetworking.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.csproj">
-      <Project>{6159F507-D62C-B604-95CF-F2DA4A7C2DF9}</Project>
-      <Name>PhotonUnityNetworking.Utilities.PhotonPlayer.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="PunDemos.DemoHubEditor.csproj">
-      <Project>{BE3207FA-B4DF-7F8F-D45F-61C9E8254316}</Project>
-      <Name>PunDemos.DemoHubEditor</Name>
-    </ProjectReference>
-    <ProjectReference Include="PhotonRealtime.csproj">
-      <Project>{A8BFFF95-18B7-1C52-80BD-56ED94425099}</Project>
-      <Name>PhotonRealtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="PhotonUnityNetworking.Utilities.csproj">
-      <Project>{80B1E2FE-AEAB-2D62-0196-C27D417A9D37}</Project>
-      <Name>PhotonUnityNetworking.Utilities</Name>
-    </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.csproj">
       <Project>{A7FAD3D6-C59A-F3AD-D4D7-F4581383B9F4}</Project>
       <Name>PhotonUnityNetworking</Name>
-    </ProjectReference>
-    <ProjectReference Include="PhotonUnityNetworking.Demos.csproj">
-      <Project>{F8C516D2-9087-03FA-63D2-0CF8CB70A066}</Project>
-      <Name>PhotonUnityNetworking.Demos</Name>
     </ProjectReference>
     <ProjectReference Include="PunDemos.DemoSlotcarEditor.csproj">
       <Project>{2752A25F-3CFF-8D87-C1B3-759173C5FF23}</Project>
@@ -903,6 +876,34 @@
     <ProjectReference Include="PhotonUnityNetworking.Utilities.Culling.Editor.csproj">
       <Project>{EFB3C64D-9ED3-D298-FA96-060257E438B0}</Project>
       <Name>PhotonUnityNetworking.Utilities.Culling.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="PhotonUnityNetworking.Utilities.csproj">
+      <Project>{80B1E2FE-AEAB-2D62-0196-C27D417A9D37}</Project>
+      <Name>PhotonUnityNetworking.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="PhotonUnityNetworking.Demos.csproj">
+      <Project>{F8C516D2-9087-03FA-63D2-0CF8CB70A066}</Project>
+      <Name>PhotonUnityNetworking.Demos</Name>
+    </ProjectReference>
+    <ProjectReference Include="PhotonChat.csproj">
+      <Project>{FA725516-54B8-31AC-6494-B32C39232FB3}</Project>
+      <Name>PhotonChat</Name>
+    </ProjectReference>
+    <ProjectReference Include="PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.csproj">
+      <Project>{6159F507-D62C-B604-95CF-F2DA4A7C2DF9}</Project>
+      <Name>PhotonUnityNetworking.Utilities.PhotonPlayer.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="PhotonUnityNetworking.Editor.csproj">
+      <Project>{89930DF3-D78E-54F2-81F9-3C7B696F0DFF}</Project>
+      <Name>PhotonUnityNetworking.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="PunDemos.DemoHubEditor.csproj">
+      <Project>{BE3207FA-B4DF-7F8F-D45F-61C9E8254316}</Project>
+      <Name>PunDemos.DemoHubEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="PhotonRealtime.csproj">
+      <Project>{A8BFFF95-18B7-1C52-80BD-56ED94425099}</Project>
+      <Name>PhotonRealtime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

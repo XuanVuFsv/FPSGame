@@ -76,10 +76,10 @@ public class WallSpawner : MonoBehaviour
     public void DestroyWall(int wallActiveIndex, RaycastHit hit)
     {
         destroyedWall++;
-        woodEffect.transform.position = hit.point;
-        woodEffect.transform.rotation = Quaternion.LookRotation(hit.normal);
-        woodEffect.gameObject.SetActive(true);
-        woodEffect.Play();
+        //woodEffect.transform.position = hit.point;
+        //woodEffect.transform.rotation = Quaternion.LookRotation(hit.normal);
+        //woodEffect.gameObject.SetActive(true);
+        //woodEffect.Play();
 
         wallList[activeIndex[wallActiveIndex]].GetComponent<WallBehaviour>().index = 10;
         wallList[activeIndex[wallActiveIndex]].SetActive(false);
